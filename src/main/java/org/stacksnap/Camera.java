@@ -16,30 +16,32 @@ public final class Camera {
 	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ssZ");
 
 	private static XStream xstream = new XStream();
-	
+
 	static {
 		XStream.setupDefaultSecurity(xstream);
-		xstream.allowTypesByWildcard(new String[] {"**.*"});
+		xstream.allowTypesByWildcard(new String[] { "**.*" });
 	}
 
 	public static <T> String snap(T target, Method method, Object[] args, Throwable error) {
-		
-		Snapshot snap = new Snapshot(target, method, error, args);
-
-		final String filename = "stacksnaps" + File.separator + "snap-" + target.getClass().getName() + "-"
-				+ SDF.format(new Date());
-		String xml = xstream.toXML(snap);
 		try {
+			Snapshot snap = new Snapshot(target, method, error, args);
+
+			final String filename = "stacksnaps" + File.separator + "snap-" + target.getClass().getName() + "-"
+					+ SDF.format(new Date());
+			String xml = xstream.toXML(snap);
+
 			if (Files.notExists(Paths.get("stacksnaps"))) {
 				Files.createDirectory(Paths.get("stacksnaps"));
 			}
 
 			Files.write(Paths.get(filename), xml.getBytes());
-			System.out.println(filename);
-		} catch (IOException e) {
+			System.out.println("[stacksnap] created stack snapshot: " + filename);
+			return filename;
+		} catch (Exception e) {
+			System.out.println("[stacksnap] Error: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return filename;
+		return null;
 
 	}
 
@@ -51,34 +53,25 @@ public final class Camera {
 			Snapshot snap = (Snapshot) xstream.fromXML(xml);
 			rValue = (T) snap.getTarget();
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			System.out.println("[stacksnap] Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return rValue;
 	}
-	
+
 	public static Object replay(String path) {
 		try {
 			String xml = Files.readString(Paths.get(path));
 			Snapshot snap = (Snapshot) xstream.fromXML(xml);
 			Object target = snap.getTarget();
 			Method m = snap.getMethod();
-			Object [] args = snap.getArguments();
-			
+			Object[] args = snap.getArguments();
+
 			return m.invoke(target, args);
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			System.out.println("[stacksnap] Error: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
@@ -88,7 +81,7 @@ public final class Camera {
 		private int age = 44;
 		private String name = "Jay";
 		private Boolean male = true;
-		
+
 		public void doIt() {
 			age = 90;
 		}
@@ -103,14 +96,14 @@ public final class Camera {
 	public static void main(String... args) throws NoSuchMethodException, SecurityException {
 
 		Test t = new Camera.Test();
-		
+
 		Method m = t.getClass().getDeclaredMethod("doIt");
 
 		String filename = Camera.snap(t, m, new Object[] {}, new Exception("Fna"));
 
 		Test restored = Camera.restore(filename);
 		System.out.println(restored);
-		
+
 		Object out = Camera.replay(filename);
 		System.out.println("Replayed: " + out);
 	}

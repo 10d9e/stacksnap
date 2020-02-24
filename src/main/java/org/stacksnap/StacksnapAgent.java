@@ -13,18 +13,19 @@ public class StacksnapAgent {
 	}
 	
 	public static void premain(String arguments, Instrumentation instrumentation) {
-		System.out.println("Welcome to Stacksnap!");
+		System.out.println("Stacksnap stack snapshot tool");
 		
 		new AgentBuilder.Default()
 			.disableClassFormatChanges()
 			.with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
 			.with(AgentBuilder.Listener.StreamWriting.toSystemOut().withTransformationsOnly())
-			//.type(ElementMatchers.nameEndsWith("Timed")) 
-			.type(ElementMatchers.nameEndsWith("FooMappingExamplesController"))
+			//.with(AgentBuilder.Listener.StreamWriting.toSystemOut())
+			.type(ElementMatchers.nameEndsWith("Timed")) 
+			//.type( ElementMatchers.anyOf(ElementMatchers.nameEndsWith("FooMappingExamplesController"))
 			.transform((builder, type, classLoader, module) -> 
 				builder.visit(Advice.to(StacksnapAdviceHandler.class).on(ElementMatchers.isMethod()))
 			)
-			.installOn(instrumentation);	
+			.installOn(instrumentation);
 		
 		/*
 		new AgentBuilder.Default()
