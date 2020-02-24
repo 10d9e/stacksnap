@@ -22,7 +22,7 @@ public class StacksnapAgent {
 			//.type(ElementMatchers.nameEndsWith("Timed"))
 			.type(ElementMatchers.nameEndsWith("FooMappingExamplesController"))
 			.transform((builder, type, classLoader, module) -> 
-				builder.visit( Advice.to(StacksnapAdviceHandler.class).on(ElementMatchers.isMethod()))
+				builder.visit(Advice.to(StacksnapAdviceHandler.class).on(ElementMatchers.isMethod()))
 			)
 			.installOn(instrumentation);	
 		
