@@ -19,7 +19,7 @@ public class StacksnapAgent {
 			.disableClassFormatChanges()
 			.with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
 			.with(AgentBuilder.Listener.StreamWriting.toSystemOut().withTransformationsOnly())
-			//.type(ElementMatchers.nameEndsWith("Timed"))
+			//.type(ElementMatchers.nameEndsWith("Timed")) 
 			.type(ElementMatchers.nameEndsWith("FooMappingExamplesController"))
 			.transform((builder, type, classLoader, module) -> 
 				builder.visit(Advice.to(StacksnapAdviceHandler.class).on(ElementMatchers.isMethod()))
