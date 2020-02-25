@@ -18,6 +18,8 @@ public class StacksnapConfigurationBuilder {
 
 	private StacksnapConfiguration configuration;
 
+	
+
 	public StacksnapConfigurationBuilder() {
 		try {
 			this.configuration = yaml.load(Files.readString(Paths.get("stacksnap.yml")));
@@ -26,6 +28,10 @@ public class StacksnapConfigurationBuilder {
 		} catch (Exception e) {
 			System.err.println("Error loading configuration: stacksnap.yml");
 		}
+	}
+	
+	public StacksnapConfiguration getConfiguration() {
+		return configuration;
 	}
 
 	public StacksnapConfigurationBuilder(String configPath) throws Exception {

@@ -1,8 +1,6 @@
-package org.stacksnap;
+package org.stacksnap.serialization;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,8 +10,10 @@ import java.util.Date;
 import com.thoughtworks.xstream.XStream;
 
 public final class Camera {
+	
+	public static final String SNAP_DIRECTORY = "snap";
 
-	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ssZ");
+	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss.SSS");
 
 	private static XStream xstream = new XStream();
 
@@ -26,12 +26,12 @@ public final class Camera {
 		try {
 			Snapshot snap = new Snapshot(target, method, error, args);
 
-			final String filename = "stacksnaps" + File.separator + "snap-" + target.getClass().getName() + "-"
+			final String filename = SNAP_DIRECTORY + File.separator + target.getClass().getName() + "-"
 					+ SDF.format(new Date());
 			String xml = xstream.toXML(snap);
 
-			if (Files.notExists(Paths.get("stacksnaps"))) {
-				Files.createDirectory(Paths.get("stacksnaps"));
+			if (Files.notExists(Paths.get(SNAP_DIRECTORY))) {
+				Files.createDirectory(Paths.get(SNAP_DIRECTORY));
 			}
 
 			Files.write(Paths.get(filename), xml.getBytes());

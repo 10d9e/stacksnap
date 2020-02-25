@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
+import org.stacksnap.serialization.Camera;
+
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;

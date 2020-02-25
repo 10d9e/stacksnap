@@ -1,4 +1,4 @@
-package org.stacksnap;
+package org.stacksnap.serialization;
 
 import java.lang.reflect.Method;
 

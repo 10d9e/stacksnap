@@ -4,6 +4,8 @@ public class StacksnapConfiguration {
 	
 	private float version;
 	
+	private Logging logging;
+	
 	private Type type;
 		
 	public Type getType() {
@@ -21,5 +23,17 @@ public class StacksnapConfiguration {
 	public void setVersion(float version) {
 		this.version = version;
 	}
+	
+	public Logging getLogging() {
+		return logging;
+	}
 
+	public void setLogging(Logging logging) {
+		this.logging = logging;
+	}
+
+	@Override
+	public String toString() {
+		return "StacksnapConfiguration [version=" + version + ", logging=" + logging + ", type=" + type + "]";
+	}
 }

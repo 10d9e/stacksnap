@@ -21,4 +21,10 @@ public class Type {
 	public void setIgnore(Ignore ignore) {
 		this.ignore = ignore;
 	}
+
+	@Override
+	public String toString() {
+		return "Type [match=" + match + ", ignore=" + ignore + "]";
+	}
+	
 }

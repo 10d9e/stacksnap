@@ -2,6 +2,8 @@ package org.stacksnap;
 
 import java.lang.reflect.Method;
 
+import org.stacksnap.serialization.Camera;
+
 import net.bytebuddy.asm.Advice;
 
 public class StacksnapAdviceHandler {

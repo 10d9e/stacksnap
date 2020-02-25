@@ -1,6 +1,15 @@
 # Version tag
 version: 1.0
 
+# Console logging
+logging: 
+    systemOut:
+        #errorsOnly: true
+        #transformationsOnly: true
+    systemError:
+        #errorsOnly: true
+        #transformationsOnly: true
+
 # Class types to be instrumented by stacksnap
 type:
   
