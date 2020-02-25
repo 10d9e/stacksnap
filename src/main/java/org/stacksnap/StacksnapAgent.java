@@ -7,7 +7,7 @@ import org.stacksnap.config.StacksnapConfigurationBuilder;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
-import net.bytebuddy.matcher.ElementMatchers;
+import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public class StacksnapAgent {
 
@@ -24,46 +24,45 @@ public class StacksnapAgent {
 				.with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
 
 		agentBuilder = handleLogging(config, agentBuilder);
-		
+
 		agentBuilder
-				.ignore(ElementMatchers.nameMatches("org.stacksnap.*")
-						.or(ElementMatchers.nameMatches("com.thoughtworks.xstream.*"))
-						.or(ElementMatchers.nameMatches("net.bytebuddy.*"))
-						.or(ElementMatchers.nameMatches("org.yaml.snakeyaml.*"))
-						.or(ElementMatchers.nameMatches("java.*")).or(ElementMatchers.nameMatches("javax.*"))
-						.or(ElementMatchers.nameMatches("sun.*")).or(ElementMatchers.nameMatches("jdk.*"))
-						.or(ElementMatchers.nameMatches("com.sun.*")).or(config.typeIgnores()))
+				.ignore(anyOf(nameMatches("org.stacksnap.*"), nameMatches("com.thoughtworks.xstream.*"),
+						nameMatches("net.bytebuddy.*"), nameMatches("org.yaml.snakeyaml.*"), nameMatches("java.*"),
+						nameMatches("javax.*"), nameMatches("sun.*"), nameMatches("jdk.*"), nameMatches("com.sun.*"),
+						config.typeIgnores()))
 				.type(config.typeMatches())
-				.transform((builder, type, classLoader, module) -> builder
-						.visit(Advice.to(StacksnapAdviceHandler.class).on(ElementMatchers.isMethod())))
+				.transform((builder, type, classLoader,
+						module) -> builder.visit(Advice.to(StacksnapAdviceHandler.class)
+								.on( isMethod().and( config.methodMatches() ) ))
+				)
 				.installOn(instrumentation);
 
 	}
-	
+
 	private static AgentBuilder buildLog(AgentBuilder agentBuilder, Loggable loggable, StackSnapStreamWriting log) {
 		if (loggable != null) {
 			if (loggable.isTransformationsOnly() == true) {
 				agentBuilder = agentBuilder.with(log.withTransformationsOnly());
 			}
-			
+
 			if (loggable.isErrorsOnly() == true) {
 				agentBuilder = agentBuilder.with(log.withTransformationsOnly());
-			} 
+			}
 
-			if(loggable.isTransformationsOnly() == false && loggable.isErrorsOnly() == false){
+			if (loggable.isTransformationsOnly() == false && loggable.isErrorsOnly() == false) {
 				agentBuilder = agentBuilder.with(log);
-			}			
+			}
 		}
 		return agentBuilder;
 	}
-	
+
 	private static AgentBuilder handleLogging(StacksnapConfigurationBuilder config, AgentBuilder agentBuilder) {
-		if(config.getConfiguration().getLogging() != null) {
+		if (config.getConfiguration().getLogging() != null) {
 			Loggable loggable = config.getConfiguration().getLogging().getSystemError();
 			agentBuilder = buildLog(agentBuilder, loggable, StackSnapStreamWriting.toSystemError());
 			loggable = config.getConfiguration().getLogging().getSystemOut();
 			agentBuilder = buildLog(agentBuilder, loggable, StackSnapStreamWriting.toSystemOut());
-			
+
 		}
 		return agentBuilder;
 	}

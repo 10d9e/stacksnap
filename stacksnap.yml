@@ -2,380 +2,802 @@
 version: 1.0
 
 # Console logging
-logging: 
-    systemOut:
+# logging: 
+    # systemOut:
         #errorsOnly: true
         #transformationsOnly: true
-    systemError:
+    # systemError:
         #errorsOnly: true
         #transformationsOnly: true
 
 # Class types to be instrumented by stacksnap
-type:
+types:
   
-  # Match section to configure type matchers
-  match:
-    # ------- #
-    # "named" #
-    # ------- #
-    # Matches a type for its exact fully-qualified name
-    # Represented as list of strings
-    named: 
-      - 'org.myapp.test.NewTestTimed'
-      - 'org.myapp.test.MyBaseClass'
+    # Match section to configure type matchers
+    match:
+        # ------- #
+        # "named" #
+        # ------- #
+        # Matches a type for its exact fully-qualified name
+        # Represented as list of strings
+        # named: 
+        #  - 'org.myapp.test.NewTestTimed'
+        #  - 'org.myapp.test.MyBaseClass'
 
-    # ------------- #
-    # "nameMatches" #
-    # ------------- #
-    # Matches a type name against a regular expression.
-    # Represented as list of strings
-    # nameMatches:
-    #  - 'org.myapp.test.*'
-    #  - 'org.*.foo.*'
+        # ----------- #
+        # "nameRegex" #
+        # ----------- #
+        # Matches a type name against a regular expression.
+        # Represented as list of strings
+        # nameRegex:
+        #  - 'org.myapp.test..*'
+        #  - 'org.foo..*'
 
-    # ----------------- #
-    # "namedIgnoreCase" #
-    # ----------------- #
-    # Matches a type for its name. The name's
-    # capitalization is ignored.
-    # Represented as list of strings
-    # namedIgnoreCase:
-    #  - 'ORG.myapp.TEST.NewTestTimed'
-    #  - 'ORG.MYAPP.TEST.MYBASECLASS'
+        # ------------- #
+        # "nameMatches" #
+        # ------------- #
+        # Matches a type name against a wildcard expression. 
+        # Default wildcard rules are: "?" -> ".", "*" -> ".*",
+        # Represented as list of strings
+        # nameMatches:
+        #  - 'org.?yapp.test.*'
+        #  - '*.*.?oo.*'
 
-    # -------------- #
-    # "nameEndsWith" #
-    # -------------- #
-    # Matches a type for its name's suffix.
-    # Represented as list of strings
-    # nameEndsWith: 
-    #  - 'Watched'
-    #  - 'Instrumented'
-    
-    # ------------------------ #
-    # "nameEndsWithIgnoreCase" #
-    # ------------------------ #
-    # Matches a type for its name's suffix. The
-    # suffix capitalization is ignored.
-    # Represented as list of strings.
-    # nameEndsWithIgnoreCase:
-    #  - 'WATCHED'
-    #  - 'INSTRUMENTED'
+        # ----------------- #
+        # "namedIgnoreCase" #
+        # ----------------- #
+        # Matches a type for its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings
+        # namedIgnoreCase:
+        #  - 'ORG.myapp.TEST.NewTestTimed'
+        #  - 'ORG.MYAPP.TEST.MYBASECLASS'
 
-    # ---------------- #
-    # "nameStartsWith" #
-    # ---------------- #
-    # Matches a type for its name's prefix.
-    # Represented as list of strings 
-    # nameStartsWith:
-    #  - 'org.foo'
-    #  - 'net.bar'
+        # -------------- #
+        # "nameEndsWith" #
+        # -------------- #
+        # Matches a type for its name's suffix.
+        # Represented as list of strings
+        # nameEndsWith: 
+        #  - 'Watched'
+        #  - 'Instrumented'
+        
+        # ------------------------ #
+        # "nameEndsWithIgnoreCase" #
+        # ------------------------ #
+        # Matches a type for its name's suffix. The
+        # suffix capitalization is ignored.
+        # Represented as list of strings.
+        # nameEndsWithIgnoreCase:
+        #  - 'WATCHED'
+        #  - 'INSTRUMENTED'
 
-    # -------------- #
-    # "nameContains" #
-    # -------------- #
-    # Matches a type for an infix of its name.
-    # Represented as list of strings 
-    # nameContains:
-    #  - 'foo'
-    #  - 'bar'
-    #  - 'baz'
+        # ---------------- #
+        # "nameStartsWith" #
+        # ---------------- #
+        # Matches a type for its name's prefix.
+        # Represented as list of strings 
+        # nameStartsWith:
+        #  - 'org.foo'
+        #  - 'net.bar'
 
-    # ------------------------ #
-    # "nameContainsIgnoreCase" #
-    # ------------------------ #
-    # Matches a type for an infix of its name. The name's
-    # capitalization is ignored.
-    # Represented as list of strings 
-    # nameContainsIgnoreCase:
-    #  - 'FOO'
-    #  - 'baR'
-    #  - 'BaZ'
+        # -------------- #
+        # "nameContains" #
+        # -------------- #
+        # Matches a type for an infix of its name.
+        # Represented as list of strings 
+        # nameContains:
+        #  - 'foo'
+        #  - 'bar'
+        #  - 'baz'
 
-    # ---------- #
-    # "isPublic" #
-    # ---------- #
-    # Matches a type's modifier that is public.
-    # Boolean : true or false
-    # isPublic: true
+        # ------------------------ #
+        # "nameContainsIgnoreCase" #
+        # ------------------------ #
+        # Matches a type for an infix of its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings 
+        # nameContainsIgnoreCase:
+        #  - 'FOO'
+        #  - 'baR'
+        #  - 'BaZ'
 
-    # ------------- #
-    # "isProtected" #
-    # ------------- #
-    # Matches a type's modifier that is protected.
-    # Boolean : true or false
-    # isProtected: true
-    
-    # ------------------ #
-    # "isPackagePrivate" #
-    # ------------------ #
-    # Matches a type's modifier that is package private.
-    # Boolean : true or false
-    # isPackagePrivate: true
-    
-    # ---------- #
-    # "isStatic" #
-    # ---------- #
-    # Matches a type's modifier that is static.
-    # Boolean : true or false
-    # isStatic: true
-    
-    # --------- #
-    # "isFinal" #
-    # --------- #
-    # Matches a type's modifier that is final.
-    # Boolean : true or false
-    # isFinal: true
+        # ---------- #
+        # "isPublic" #
+        # ---------- #
+        # Matches a type's modifier that is public.
+        # Boolean : true or false
+        # isPublic: true
 
-    # ----------------- #
-    # "isAnnotatedWith" #
-    # ----------------- #
-    # Matches a type that has a declared annotation.
-    # This matcher does not match inherited annotations.
-    # Represented as list of strings 
-    # isAnnotatedWith:
-    #  - 'org.myapp.BarAnnotation'
-    #  - 'org.myapp.FooAnnotation'
+        # ------------- #
+        # "isProtected" #
+        # ------------- #
+        # Matches a type's modifier that is protected.
+        # Boolean : true or false
+        # isProtected: true
+        
+        # ------------------ #
+        # "isPackagePrivate" #
+        # ------------------ #
+        # Matches a type's modifier that is package private.
+        # Boolean : true or false
+        # isPackagePrivate: true
+        
+        # ---------- #
+        # "isStatic" #
+        # ---------- #
+        # Matches a type's modifier that is static.
+        # Boolean : true or false
+        # isStatic: true
+        
+        # --------- #
+        # "isFinal" #
+        # --------- #
+        # Matches a type's modifier that is final.
+        # Boolean : true or false
+        # isFinal: true
 
-    # --------------- #
-    # "hasAnnotation" #
-    # --------------- #
-    # Matches a list of annotations by a given matcher on a type that declared these annotations or inherited them
-    # from its super classes.
-    # Represented as list of strings 
-    # hasAnnotation:
-    #  - 'org.myapp.FooAnnotation'
-    #  - 'org.myapp.BarAnnotation'
+        # ----------------- #
+        # "isAnnotatedWith" #
+        # ----------------- #
+        # Matches a type that has a declared annotation.
+        # This matcher does not match inherited annotations.
+        # Represented as list of strings 
+        # isAnnotatedWith:
+        #  - 'org.myapp.BarAnnotation'
+        #  - 'org.myapp.FooAnnotation'
 
-    # ------------- #
-    # "isSubTypeOf" #
-    # ------------- #
-    # Matches any type that is a subtype of the given type.
-    # Represented as list of strings 
-    # isSubTypeOf:
-    #  - 'org.myapp.Base'
-    
-    # --------------- #
-    # "isSuperTypeOf" #
-    # --------------- #
-    # Matches any type that is a super type of the given type.
-    # Represented as list of strings 
-    # isSuperTypeOf:
-    #  - 'org.myapp.MyBaseImpl'
+        # --------------- #
+        # "hasAnnotation" #
+        # --------------- #
+        # Matches a list of annotations by a given matcher on a type that declared these annotations or inherited them
+        # from its super classes.
+        # Represented as list of strings 
+        # hasAnnotation:
+        #  - 'org.myapp.FooAnnotation'
+        #  - 'org.myapp.BarAnnotation'
 
-    # --------------- #
-    # "hasSuperClass" #
-    # --------------- #
-    # Matches any type that declares a super class (but not interface) that matches the provided matcher.
-    # Represented as list of strings 
-    # hasSuperClass:
-    #  - 'org.myapp.MyBaseClass'
+        # ------------- #
+        # "isSubTypeOf" #
+        # ------------- #
+        # Matches any type that is a subtype of the given type.
+        # Represented as list of strings 
+        # isSubTypeOf:
+        #  - 'org.myapp.Base'
+        
+        # --------------- #
+        # "isSuperTypeOf" #
+        # --------------- #
+        # Matches any type that is a super type of the given type.
+        # Represented as list of strings 
+        # isSuperTypeOf:
+        #  - 'org.myapp.MyBaseImpl'
 
-    # -------------- #
-    # "hasSuperType" #
-    # -------------- #
-    # Matches any type that declares a super type that matches the provided matcher.
-    # Represented as list of strings 
-    # hasSuperType:
-    #  - 'org.myapp.MyCoolInterface'
-    
-    # --------------- #
-    # "declaresField" #
-    # --------------- #
-    # Matches a type by a another matcher that is applied on any of its declared fields.
-    # Represented as list of strings 
-    # declaresField:
-    #  - 'age'
+        # --------------- #
+        # "hasSuperClass" #
+        # --------------- #
+        # Matches any type that declares a super class (but not interface) that matches the provided matcher.
+        # Represented as list of strings 
+        # hasSuperClass:
+        #  - 'org.myapp.MyBaseClass'
 
-    # ---------------- #
-    # "declaresMethod" #
-    # ---------------- #
-    # Matches a type by a another matcher that is applied on any of its declared methods.
-    # Represented as list of strings 
-    # declaresMethod:
-    #  - 'testMethod'
-    #  - 'executeSomethingAwesome'
+        # -------------- #
+        # "hasSuperType" #
+        # -------------- #
+        # Matches any type that declares a super type that matches the provided matcher.
+        # Represented as list of strings 
+        # hasSuperType:
+        #  - 'org.myapp.MyCoolInterface'
+        
+        # --------------- #
+        # "declaresField" #
+        # --------------- #
+        # Matches a type by a another matcher that is applied on any of its declared fields.
+        # Represented as list of strings 
+        # declaresField:
+        #  - 'age'
 
-  # Ignore section to configure ignore type filters
-  ignore:
+        # ---------------- #
+        # "declaresMethod" #
+        # ---------------- #
+        # Matches a type by a another matcher that is applied on any of its declared methods.
+        # Represented as list of strings 
+        # declaresMethod:
+        #  - 'testMethod'
+        #  - 'executeSomethingAwesome'
 
-    # ------- #
-    # "named" #
-    # ------- #
-    # Matches a type for its exact fully-qualified name
-    # Represented as list of strings
-    # named: 
-    #  - 'org.myapp.Hello'
-    #  - 'org.myapp.foo.World'
+    # Ignore section to configure ignore type filters
+    ignore:
 
-    # ------------- #
-    # "nameMatches" #
-    # ------------- #
-    # Matches a type name against a regular expression.
-    # Represented as list of strings
-    # nameMatches:
-    #  - 'org.myapp.test.*'
-    #  - 'org.*.foo.*'
+        # ------- #
+        # "named" #
+        # ------- #
+        # Matches a type for its exact fully-qualified name
+        # Represented as list of strings
+        # named: 
+        #  - 'org.myapp.Hello'
+        #  - 'org.myapp.foo.World'
 
-    # ----------------- #
-    # "namedIgnoreCase" #
-    # ----------------- #
-    # Matches a type for its name. The name's
-    # capitalization is ignored.
-    # Represented as list of strings
-    # namedIgnoreCase:
-    #  - 'ORG.myapp.TEST.NewTestTimed'
-    #  - 'ORG.MYAPP.TEST.MYBASECLASS'
+        # ----------- #
+        # "nameRegex" #
+        # ----------- #
+        # Matches a type name against a regular expression.
+        # Represented as list of strings
+        # nameRegex:
+        #  - 'MyMethod.*'
+        #  - '.*foo..*'
 
-    # -------------- #
-    # "nameEndsWith" #
-    # -------------- #
-    # Matches a type for its name's suffix.
-    # Represented as list of strings
-    # nameEndsWith: 
-    #  - 'Watched'
-    #  - 'Instrumented'
-    
-    # ------------------------ #
-    # "nameEndsWithIgnoreCase" #
-    # ------------------------ #
-    # Matches a type for its name's suffix. The
-    # suffix capitalization is ignored.
-    # Represented as list of strings.
-    # nameEndsWithIgnoreCase:
-    #  - 'WATCHED'
-    #  - 'INSTRUMENTED'
+        # ------------- #
+        # "nameMatches" #
+        # ------------- #
+        # Matches a type name against a wildcard expression. 
+        # Default wildcard rules are: "?" -> ".", "*" -> ".*",
+        # Represented as list of strings
+        # nameMatches:
+        #  - 'Foo*MethodNumber??'
+        #  - '*Bar*'
 
-    # ---------------- #
-    # "nameStartsWith" #
-    # ---------------- #
-    # Matches a type for its name's prefix.
-    # Represented as list of strings 
-    # nameStartsWith:
-    #  - 'org.foo'
-    #  - 'net.bar'
+        # ----------------- #
+        # "namedIgnoreCase" #
+        # ----------------- #
+        # Matches a type for its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings
+        # namedIgnoreCase:
+        #  - 'ORG.myapp.TEST.NewTestTimed'
+        #  - 'ORG.MYAPP.TEST.MYBASECLASS'
 
-    # -------------- #
-    # "nameContains" #
-    # -------------- #
-    # Matches a type for an infix of its name.
-    # Represented as list of strings 
-    # nameContains:
-    #  - 'foo'
-    #  - 'bar'
-    #  - 'baz'
+        # -------------- #
+        # "nameEndsWith" #
+        # -------------- #
+        # Matches a type for its name's suffix.
+        # Represented as list of strings
+        # nameEndsWith: 
+        #  - 'Watched'
+        #  - 'Instrumented'
+        
+        # ------------------------ #
+        # "nameEndsWithIgnoreCase" #
+        # ------------------------ #
+        # Matches a type for its name's suffix. The
+        # suffix capitalization is ignored.
+        # Represented as list of strings.
+        # nameEndsWithIgnoreCase:
+        #  - 'WATCHED'
+        #  - 'INSTRUMENTED'
 
-    # ------------------------ #
-    # "nameContainsIgnoreCase" #
-    # ------------------------ #
-    # Matches a type for an infix of its name. The name's
-    # capitalization is ignored.
-    # Represented as list of strings 
-    # nameContainsIgnoreCase:
-    #  - 'FOO'
-    #  - 'baR'
-    #  - 'BaZ'
+        # ---------------- #
+        # "nameStartsWith" #
+        # ---------------- #
+        # Matches a type for its name's prefix.
+        # Represented as list of strings 
+        # nameStartsWith:
+        #  - 'org.foo'
+        #  - 'net.bar'
 
-    # ---------- #
-    # "isPublic" #
-    # ---------- #
-    # Matches a type's modifier that is public.
-    # Boolean : true or false
-    # isPublic: true
+        # -------------- #
+        # "nameContains" #
+        # -------------- #
+        # Matches a type for an infix of its name.
+        # Represented as list of strings 
+        # nameContains:
+        #  - 'foo'
+        #  - 'bar'
+        #  - 'baz'
 
-    # ------------- #
-    # "isProtected" #
-    # ------------- #
-    # Matches a type's modifier that is protected.
-    # Boolean : true or false
-    # isProtected: true
-    
-    # ------------------ #
-    # "isPackagePrivate" #
-    # ------------------ #
-    # Matches a type's modifier that is package private.
-    # Boolean : true or false
-    # isPackagePrivate: true
-    
-    # ---------- #
-    # "isStatic" #
-    # ---------- #
-    # Matches a type's modifier that is static.
-    # Boolean : true or false
-    # isStatic: true
-    
-    # --------- #
-    # "isFinal" #
-    # --------- #
-    # Matches a type's modifier that is final.
-    # Boolean : true or false
-    # isFinal: true
+        # ------------------------ #
+        # "nameContainsIgnoreCase" #
+        # ------------------------ #
+        # Matches a type for an infix of its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings 
+        # nameContainsIgnoreCase:
+        #  - 'FOO'
+        #  - 'baR'
+        #  - 'BaZ'
 
-    # ----------------- #
-    # "isAnnotatedWith" #
-    # ----------------- #
-    # Matches a type that has a declared annotation.
-    # This matcher does not match inherited annotations.
-    # Represented as list of strings 
-    # isAnnotatedWith:
-    #  - 'org.myapp.BarAnnotation'
-    #  - 'org.myapp.FooAnnotation'
+        # ---------- #
+        # "isPublic" #
+        # ---------- #
+        # Matches a type's modifier that is public.
+        # Boolean : true or false
+        # isPublic: true
 
-    # --------------- #
-    # "hasAnnotation" #
-    # --------------- #
-    # Matches a list of annotations by a given matcher on a type that declared these annotations or inherited them
-    # from its super classes.
-    # Represented as list of strings 
-    # hasAnnotation:
-    #  - 'org.myapp.FooAnnotation'
-    #  - 'org.myapp.BarAnnotation'
+        # ------------- #
+        # "isProtected" #
+        # ------------- #
+        # Matches a type's modifier that is protected.
+        # Boolean : true or false
+        # isProtected: true
+        
+        # ------------------ #
+        # "isPackagePrivate" #
+        # ------------------ #
+        # Matches a type's modifier that is package private.
+        # Boolean : true or false
+        # isPackagePrivate: true
+        
+        # ---------- #
+        # "isStatic" #
+        # ---------- #
+        # Matches a type's modifier that is static.
+        # Boolean : true or false
+        # isStatic: true
+        
+        # --------- #
+        # "isFinal" #
+        # --------- #
+        # Matches a type's modifier that is final.
+        # Boolean : true or false
+        # isFinal: true
 
-    # ------------- #
-    # "isSubTypeOf" #
-    # ------------- #
-    # Matches any type that is a subtype of the given type.
-    # Represented as list of strings 
-    # isSubTypeOf:
-    #  - 'org.myapp.Base'
-    
-    # --------------- #
-    # "isSuperTypeOf" #
-    # --------------- #
-    # Matches any type that is a super type of the given type.
-    # Represented as list of strings 
-    # isSuperTypeOf:
-    #  - 'org.myapp.MyBaseImpl'
+        # ----------------- #
+        # "isAnnotatedWith" #
+        # ----------------- #
+        # Matches a type that has a declared annotation.
+        # This matcher does not match inherited annotations.
+        # Represented as list of strings 
+        # isAnnotatedWith:
+        #  - 'org.myapp.BarAnnotation'
+        #  - 'org.myapp.FooAnnotation'
 
-    # --------------- #
-    # "hasSuperClass" #
-    # --------------- #
-    # Matches any type that declares a super class (but not interface) that matches the provided matcher.
-    # Represented as list of strings 
-    # hasSuperClass:
-    #  - 'org.myapp.MyBaseClass'
+        # --------------- #
+        # "hasAnnotation" #
+        # --------------- #
+        # Matches a list of annotations by a given matcher on a type that declared these annotations or inherited them
+        # from its super classes.
+        # Represented as list of strings 
+        # hasAnnotation:
+        #  - 'org.myapp.FooAnnotation'
+        #  - 'org.myapp.BarAnnotation'
 
-    # -------------- #
-    # "hasSuperType" #
-    # -------------- #
-    # Matches any type that declares a super type that matches the provided matcher.
-    # Represented as list of strings 
-    # hasSuperType:
-    #  - 'org.myapp.MyCoolInterface'
-    
-    # --------------- #
-    # "declaresField" #
-    # --------------- #
-    # Matches a type by a another matcher that is applied on any of its declared fields.
-    # Represented as list of strings 
-    # declaresField:
-    #  - 'age'
+        # ------------- #
+        # "isSubTypeOf" #
+        # ------------- #
+        # Matches any type that is a subtype of the given type.
+        # Represented as list of strings 
+        # isSubTypeOf:
+        #  - 'org.myapp.Base'
+        
+        # --------------- #
+        # "isSuperTypeOf" #
+        # --------------- #
+        # Matches any type that is a super type of the given type.
+        # Represented as list of strings 
+        # isSuperTypeOf:
+        #  - 'org.myapp.MyBaseImpl'
 
-    # ---------------- #
-    # "declaresMethod" #
-    # ---------------- #
-    # Matches a type by a another matcher that is applied on any of its declared methods.
-    # Represented as list of strings 
-    # declaresMethod:
-    #  - 'testMethod'
-    #  - 'executeSomethingAwesome'
+        # --------------- #
+        # "hasSuperClass" #
+        # --------------- #
+        # Matches any type that declares a super class (but not interface) that matches the provided matcher.
+        # Represented as list of strings 
+        # hasSuperClass:
+        #  - 'org.myapp.MyBaseClass'
+
+        # -------------- #
+        # "hasSuperType" #
+        # -------------- #
+        # Matches any type that declares a super type that matches the provided matcher.
+        # Represented as list of strings 
+        # hasSuperType:
+        #  - 'org.myapp.MyCoolInterface'
+        
+        # --------------- #
+        # "declaresField" #
+        # --------------- #
+        # Matches a type by a another matcher that is applied on any of its declared fields.
+        # Represented as list of strings 
+        # declaresField:
+        #  - 'age'
+
+        # ---------------- #
+        # "declaresMethod" #
+        # ---------------- #
+        # Matches a type by a another matcher that is applied on any of its declared methods.
+        # Represented as list of strings 
+        # declaresMethod:
+        #  - 'testMethod'
+        #  - 'executeSomethingAwesome'
+
+# Method types to be instrumented by stacksnap
+methods:
+    match:
+        # ------- #
+        # "named" #
+        # ------- #
+        # Matches a method for its exact fully-qualified name
+        # Represented as list of strings
+        named: 
+          - 'org.myapp.test.NewTestTimed'
+          - 'org.myapp.test.MyBaseClass'
+
+        # ----------- #
+        # "nameRegex" #
+        # ----------- #
+        # Matches a method name against a regular expression.
+        # Represented as list of strings
+        # nameRegex:
+        #  - 'org.myapp.test..*'
+        #  - 'org.foo..*'
+
+        # ------------- #
+        # "nameMatches" #
+        # ------------- #
+        # Matches a method name against a wildcard expression. 
+        # Default wildcard rules are: "?" -> ".", "*" -> ".*",
+        # Represented as list of strings
+        # nameMatches:
+        #  - 'org.?yapp.test.*'
+        #  - '*.*.?oo.*'
+
+        # ----------------- #
+        # "namedIgnoreCase" #
+        # ----------------- #
+        # Matches a method for its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings
+        # namedIgnoreCase:
+        #  - 'ORG.myapp.TEST.NewTestTimed'
+        #  - 'ORG.MYAPP.TEST.MYBASECLASS'
+
+        # -------------- #
+        # "nameEndsWith" #
+        # -------------- #
+        # Matches a method for its name's suffix.
+        # Represented as list of strings
+        # nameEndsWith: 
+        #  - 'Watched'
+        #  - 'Instrumented'
+        
+        # ------------------------ #
+        # "nameEndsWithIgnoreCase" #
+        # ------------------------ #
+        # Matches a method for its name's suffix. The
+        # suffix capitalization is ignored.
+        # Represented as list of strings.
+        # nameEndsWithIgnoreCase:
+        #  - 'WATCHED'
+        #  - 'INSTRUMENTED'
+
+        # ---------------- #
+        # "nameStartsWith" #
+        # ---------------- #
+        # Matches a method for its name's prefix.
+        # Represented as list of strings 
+        # nameStartsWith:
+        #  - 'org.foo'
+        #  - 'net.bar'
+
+        # -------------- #
+        # "nameContains" #
+        # -------------- #
+        # Matches a method for an infix of its name.
+        # Represented as list of strings 
+        # nameContains:
+        #  - 'foo'
+        #  - 'bar'
+        #  - 'baz'
+
+        # ------------------------ #
+        # "nameContainsIgnoreCase" #
+        # ------------------------ #
+        # Matches a method for an infix of its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings 
+        # nameContainsIgnoreCase:
+        #  - 'FOO'
+        #  - 'baR'
+        #  - 'BaZ'
+
+        # ----------------- #
+        # "isAnnotatedWith" #
+        # ----------------- #
+        # Matches a method that has a declared annotation.
+        # This matcher does not match inherited annotations.
+        # Represented as list of fully qualified classname strings 
+        # isAnnotatedWith:
+        #  - 'org.myapp.BarAnnotation'
+        #  - 'org.myapp.FooAnnotation'
+
+        # ---------- #
+        # "isPublic" #
+        # ---------- #
+        # Matches a method's modifier that is public.
+        # Boolean : true or false
+        # isPublic: true
+
+        # ------------- #
+        # "isProtected" #
+        # ------------- #
+        # Matches a method's modifier that is protected.
+        # Boolean : true or false
+        # isProtected: true
+
+        # ---------- #
+        # "isPrivate" #
+        # ---------- #
+        # Matches a method's modifier that is private.
+        # Boolean : true or false
+        # isPrivate: true
+        
+        # ------------------ #
+        # "isPackagePrivate" #
+        # ------------------ #
+        # Matches a method's modifier that is package private.
+        # Boolean : true or false
+        # isPackagePrivate: true
+        
+        # ---------- #
+        # "isStatic" #
+        # ---------- #
+        # Matches a method's modifier that is static.
+        # Boolean : true or false
+        # isStatic: true
+        
+        # --------- #
+        # "isFinal" #
+        # --------- #
+        # Matches a method's modifier that is final.
+        # Boolean : true or false
+        # isFinal: true
+        
+        # ---------- #
+        # "canThrow" #
+        # ---------- #
+        # Matches a method by its capability to throw a given
+        # checked exception. For specifying a non-checked exception, 
+        # any method is matched.
+        # Represented as list of strings 
+        # canThrow:
+        #   - 'java.lang.RuntimeException'
+        #   - 'my.foo.BarException'
+
+        # ------------------- #
+        # "declaresException" #
+        # ------------------- #
+        # Matches a method that declares the given generic exception type 
+        # as a (erased) exception type.
+        # Represented as list of strings 
+        # declaresException:
+        #   - 'java.lang.RuntimeException'
+        #   - 'my.foo.BarException'
+
+        # ------------------ #
+        # "isOverriddenFrom" #
+        # ------------------ #
+        # Matches any virtual method with a signature that is compatible to a 
+        # method that is declared the supplied type.
+        # Represented as list of strings 
+        # isOverriddenFrom:
+        #  - 'org.myapp.Bar'
+        #  - 'org.myapp.Foo'
+
+        # ----------- #
+        # "isVirtual" #
+        # ----------- #
+        # Matches any method that is virtual, i.e. non-constructors that are 
+        # non-static and non-private.
+        # Boolean : true or false
+        # isVirtual: true
+
+        # ----------- #
+        # "isVirtual" #
+        # ----------- #
+        # Only matches Java 8 default methods.
+        # Boolean : true or false
+        # isDefaultMethod: true
+
+        # ----------- #
+        # "isSetter" #
+        # ----------- #
+        # Matches any Java bean setter method.
+        # Boolean : true or false
+        # isSetter: true
+
+        # ----------- #
+        # "isGetter" #
+        # ----------- #
+        # Matches any Java bean getter method.
+        # Boolean : true or false
+        # isGetter: true
+
+    ignore:
+        # ------- #
+        # "named" #
+        # ------- #
+        # Matches a method for its exact fully-qualified name
+        # Represented as list of strings
+        # named: 
+        #  - 'org.myapp.test.NewTestTimed'
+        #  - 'org.myapp.test.MyBaseClass'
+
+        # ----------- #
+        # "nameRegex" #
+        # ----------- #
+        # Matches a method name against a regular expression.
+        # Represented as list of strings
+        # nameRegex:
+        #  - 'org.myapp.test..*'
+        #  - 'org.foo..*'
+
+        # ------------- #
+        # "nameMatches" #
+        # ------------- #
+        # Matches a method name against a wildcard expression. 
+        # Default wildcard rules are: "?" -> ".", "*" -> ".*",
+        # Represented as list of strings
+        # nameMatches:
+        #  - 'org.?yapp.test.*'
+        #  - '*.*.?oo.*'
+
+        # ----------------- #
+        # "namedIgnoreCase" #
+        # ----------------- #
+        # Matches a method for its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings
+        # namedIgnoreCase:
+        #  - 'ORG.myapp.TEST.NewTestTimed'
+        #  - 'ORG.MYAPP.TEST.MYBASECLASS'
+
+        # -------------- #
+        # "nameEndsWith" #
+        # -------------- #
+        # Matches a method for its name's suffix.
+        # Represented as list of strings
+        # nameEndsWith: 
+        #  - 'Watched'
+        #  - 'Instrumented'
+        
+        # ------------------------ #
+        # "nameEndsWithIgnoreCase" #
+        # ------------------------ #
+        # Matches a method for its name's suffix. The
+        # suffix capitalization is ignored.
+        # Represented as list of strings.
+        # nameEndsWithIgnoreCase:
+        #  - 'WATCHED'
+        #  - 'INSTRUMENTED'
+
+        # ---------------- #
+        # "nameStartsWith" #
+        # ---------------- #
+        # Matches a method for its name's prefix.
+        # Represented as list of strings 
+        # nameStartsWith:
+        #  - 'org.foo'
+        #  - 'net.bar'
+
+        # -------------- #
+        # "nameContains" #
+        # -------------- #
+        # Matches a method for an infix of its name.
+        # Represented as list of strings 
+        # nameContains:
+        #  - 'foo'
+        #  - 'bar'
+        #  - 'baz'
+
+        # ------------------------ #
+        # "nameContainsIgnoreCase" #
+        # ------------------------ #
+        # Matches a method for an infix of its name. The name's
+        # capitalization is ignored.
+        # Represented as list of strings 
+        # nameContainsIgnoreCase:
+        #  - 'FOO'
+        #  - 'baR'
+        #  - 'BaZ'
+
+        # ----------------- #
+        # "isAnnotatedWith" #
+        # ----------------- #
+        # Matches a method that has a declared annotation.
+        # This matcher does not match inherited annotations.
+        # Represented as list of fully qualified classname strings 
+        # isAnnotatedWith:
+        #  - 'org.myapp.BarAnnotation'
+        #  - 'org.myapp.FooAnnotation'
+
+        # ---------- #
+        # "isPublic" #
+        # ---------- #
+        # Matches a method's modifier that is public.
+        # Boolean : true or false
+        # isPublic: true
+
+        # ------------- #
+        # "isProtected" #
+        # ------------- #
+        # Matches a method's modifier that is protected.
+        # Boolean : true or false
+        # isProtected: true
+
+        # ---------- #
+        # "isPrivate" #
+        # ---------- #
+        # Matches a method's modifier that is private.
+        # Boolean : true or false
+        # isPrivate: true
+        
+        # ------------------ #
+        # "isPackagePrivate" #
+        # ------------------ #
+        # Matches a method's modifier that is package private.
+        # Boolean : true or false
+        # isPackagePrivate: true
+        
+        # ---------- #
+        # "isStatic" #
+        # ---------- #
+        # Matches a method's modifier that is static.
+        # Boolean : true or false
+        # isStatic: true
+        
+        # --------- #
+        # "isFinal" #
+        # --------- #
+        # Matches a method's modifier that is final.
+        # Boolean : true or false
+        # isFinal: true
+        
+        # ---------- #
+        # "canThrow" #
+        # ---------- #
+        # Matches a method by its capability to throw a given
+        # checked exception. For specifying a non-checked exception, 
+        # any method is matched.
+        # Represented as list of strings 
+        # canThrow:
+        #   - 'java.lang.RuntimeException'
+        #   - 'my.foo.BarException'
+
+        # ------------------- #
+        # "declaresException" #
+        # ------------------- #
+        # Matches a method that declares the given generic exception type 
+        # as a (erased) exception type.
+        # Represented as list of strings 
+        # declaresException:
+        #   - 'java.lang.RuntimeException'
+        #   - 'my.foo.BarException'
+
+        # ------------------ #
+        # "isOverriddenFrom" #
+        # ------------------ #
+        # Matches any virtual method with a signature that is compatible to a 
+        # method that is declared the supplied type.
+        # Represented as list of strings 
+        # isOverriddenFrom:
+        #  - 'org.myapp.Bar'
+        #  - 'org.myapp.Foo'
+
+        # ----------- #
+        # "isVirtual" #
+        # ----------- #
+        # Matches any method that is virtual, i.e. non-constructors that are 
+        # non-static and non-private.
+        # Boolean : true or false
+        # isVirtual: true
+
+        # ----------- #
+        # "isVirtual" #
+        # ----------- #
+        # Only matches Java 8 default methods.
+        # Boolean : true or false
+        # isDefaultMethod: true
+
+        # ----------- #
+        # "isSetter" #
+        # ----------- #
+        # Matches any Java bean setter method.
+        # Boolean : true or false
+        # isSetter: true
+
+        # ----------- #
+        # "isGetter" #
+        # ----------- #
+        # Matches any Java bean getter method.
+        # Boolean : true or false
+        # isGetter: true

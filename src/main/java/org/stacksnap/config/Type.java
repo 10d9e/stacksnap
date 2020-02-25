@@ -2,23 +2,23 @@ package org.stacksnap.config;
 
 public class Type {
 
-	private Match match;
+	private BaseType match;
 	
-	private Ignore ignore;
+	private BaseType ignore;
 
-	public Match getMatch() {
+	public BaseType getMatch() {
 		return match;
 	}
 
-	public void setMatch(Match match) {
+	public void setMatch(BaseType match) {
 		this.match = match;
 	}
 
-	public Ignore getIgnore() {
+	public BaseType getIgnore() {
 		return ignore;
 	}
 
-	public void setIgnore(Ignore ignore) {
+	public void setIgnore(BaseType ignore) {
 		this.ignore = ignore;
 	}
 

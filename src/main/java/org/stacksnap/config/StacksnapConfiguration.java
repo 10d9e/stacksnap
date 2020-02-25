@@ -6,14 +6,16 @@ public class StacksnapConfiguration {
 	
 	private Logging logging;
 	
-	private Type type;
+	private Type types;
+	
+	private Method methods;
 		
-	public Type getType() {
-		return type;
+	public Type getTypes() {
+		return types;
 	}
 
-	public void setType(Type type) {
-		this.type = type;
+	public void setTypes(Type types) {
+		this.types = types;
 	}
 
 	public float getVersion() {
@@ -32,8 +34,11 @@ public class StacksnapConfiguration {
 		this.logging = logging;
 	}
 
-	@Override
-	public String toString() {
-		return "StacksnapConfiguration [version=" + version + ", logging=" + logging + ", type=" + type + "]";
+	public Method getMethods() {
+		return methods;
+	}
+
+	public void setMethods(Method methods) {
+		this.methods = methods;
 	}
 }
