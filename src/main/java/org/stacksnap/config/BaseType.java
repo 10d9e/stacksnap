@@ -18,6 +18,7 @@ public class BaseType {
 	private Set<String> isSubTypeOf = new TreeSet<String>();
 	private Set<String> isSuperTypeOf = new TreeSet<String>();
 	private Set<String> hasSuperClass = new TreeSet<String>();
+	private Set<String> hasSuperType = new TreeSet<String>();
 	private Set<String> hasAnnotation = new TreeSet<String>();
 	private Set<String> declaresField = new TreeSet<String>();
 	private Set<String> declaresMethod = new TreeSet<String>();
@@ -190,18 +191,25 @@ public class BaseType {
 		this.nameEndsWithIgnoreCase = nameEndsWithIgnoreCase;
 	}
 
+	public Set<String> getHasSuperType() {
+		return hasSuperType;
+	}
+
+	public void setHasSuperType(Set<String> hasSuperType) {
+		this.hasSuperType = hasSuperType;
+	}
+
 	@Override
 	public String toString() {
-		return "Type [nameEndsWith=" + nameEndsWith + ", nameEndsWithIgnoreCase=" + nameEndsWithIgnoreCase
+		return "BaseType [nameEndsWith=" + nameEndsWith + ", nameEndsWithIgnoreCase=" + nameEndsWithIgnoreCase
 				+ ", nameStartsWith=" + nameStartsWith + ", named=" + named + ", namedIgnoreCase=" + namedIgnoreCase
 				+ ", nameContains=" + nameContains + ", nameContainsIgnoreCase=" + nameContainsIgnoreCase
-				+ ", nameMatches=" + nameMatches + ", isAnnotatedWith=" + isAnnotatedWith + ", isPublic=" + isPublic
-				+ ", isProtected=" + isProtected + ", isPackagePrivate=" + isPackagePrivate + ", isStatic=" + isStatic
-				+ ", isFinal=" + isFinal + ", isSubTypeOf=" + isSubTypeOf + ", isSuperTypeOf=" + isSuperTypeOf
-				+ ", hasSuperClass=" + hasSuperClass + ", hasAnnotation=" + hasAnnotation + ", declaresField="
-				+ declaresField + ", declaresMethod=" + declaresMethod + "]";
+				+ ", nameMatches=" + nameMatches + ", isAnnotatedWith=" + isAnnotatedWith + ", isSubTypeOf="
+				+ isSubTypeOf + ", isSuperTypeOf=" + isSuperTypeOf + ", hasSuperClass=" + hasSuperClass
+				+ ", hasSuperType=" + hasSuperType + ", hasAnnotation=" + hasAnnotation + ", declaresField="
+				+ declaresField + ", declaresMethod=" + declaresMethod + ", isPublic=" + isPublic + ", isProtected="
+				+ isProtected + ", isPackagePrivate=" + isPackagePrivate + ", isStatic=" + isStatic + ", isFinal="
+				+ isFinal + "]";
 	}
-	
-	
 	
 }

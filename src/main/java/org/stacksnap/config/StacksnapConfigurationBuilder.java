@@ -60,6 +60,10 @@ public class StacksnapConfigurationBuilder {
 			for (String s : elem.getHasSuperClass()) {
 				current = current.or(ElementMatchers.hasSuperClass(ElementMatchers.named(s)));
 			}
+			
+			for (String s : elem.getHasSuperType()) {
+				current = current.or(ElementMatchers.hasSuperType(ElementMatchers.named(s)));
+			}
 
 			for (String s : elem.getIsAnnotatedWith()) {
 				current = current
