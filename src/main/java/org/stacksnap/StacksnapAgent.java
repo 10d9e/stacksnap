@@ -31,16 +31,16 @@ public class StacksnapAgent {
 						nameMatches("javax.*"), nameMatches("sun.*"), nameMatches("jdk.*"), nameMatches("com.sun.*"),
 						config.typeIgnores()))
 				.type(config.typeMatches())
-				.transform((builder, type, classLoader,
-						module) -> builder.visit(Advice.to(StacksnapAdviceHandler.class)
-								.on( isMethod().and( config.methodMatches() ) ))
-				)
+				.transform((builder, type, classLoader, module) -> builder
+						.visit(Advice.to(StacksnapAdviceHandler.class).on(isMethod().and(config.methodMatches()))))
 				.installOn(instrumentation);
 
 	}
 
-	private static AgentBuilder buildLog(AgentBuilder agentBuilder, Loggable loggable, StackSnapStreamWriting log) {
+	private static AgentBuilder buildLog(AgentBuilder agentBuilder, Loggable loggable) {
 		if (loggable != null) {
+			StackSnapStreamWriting log = Logger.getInstance();
+
 			if (loggable.isTransformationsOnly() == true) {
 				agentBuilder = agentBuilder.with(log.withTransformationsOnly());
 			}
@@ -59,10 +59,15 @@ public class StacksnapAgent {
 	private static AgentBuilder handleLogging(StacksnapConfigurationBuilder config, AgentBuilder agentBuilder) {
 		if (config.getConfiguration().getLogging() != null) {
 			Loggable loggable = config.getConfiguration().getLogging().getSystemError();
-			agentBuilder = buildLog(agentBuilder, loggable, StackSnapStreamWriting.toSystemError());
+			if (loggable != null) {
+				Logger.toSystemError();
+				agentBuilder = buildLog(agentBuilder, loggable);
+			}
 			loggable = config.getConfiguration().getLogging().getSystemOut();
-			agentBuilder = buildLog(agentBuilder, loggable, StackSnapStreamWriting.toSystemOut());
-
+			if (loggable != null) {
+				Logger.toSystemOut();
+				agentBuilder = buildLog(agentBuilder, loggable);
+			}
 		}
 		return agentBuilder;
 	}

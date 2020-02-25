@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.stacksnap.Logger;
+
 import com.thoughtworks.xstream.XStream;
 
 public final class Camera {
@@ -35,10 +37,10 @@ public final class Camera {
 			}
 
 			Files.write(Paths.get(filename), xml.getBytes());
-			System.out.println("[stacksnap] created stack snapshot: " + filename);
+			Logger.log("created stack snapshot: " + filename);
 			return filename;
 		} catch (Exception e) {
-			System.out.println("[stacksnap] Error: " + e.getMessage());
+			Logger.log("Error creating snapshot: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
@@ -54,7 +56,7 @@ public final class Camera {
 			rValue = (T) snap.getTarget();
 
 		} catch (Exception e) {
-			System.out.println("[stacksnap] Error: " + e.getMessage());
+			Logger.log("Error restoring snapshot: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return rValue;
@@ -71,7 +73,7 @@ public final class Camera {
 			return m.invoke(target, args);
 
 		} catch (Exception e) {
-			System.out.println("[stacksnap] Error: " + e.getMessage());
+			Logger.log("Error replaying snapshot: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return null;

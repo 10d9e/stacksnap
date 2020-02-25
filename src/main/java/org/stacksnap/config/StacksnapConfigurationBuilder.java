@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.stacksnap.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -24,7 +25,7 @@ public class StacksnapConfigurationBuilder {
 	public StacksnapConfigurationBuilder() {
 		try {
 			this.configuration = yaml.load(Files.readString(Paths.get("stacksnap.yml")));
-			System.out.println("[stacksnap] Loaded configuration: stacksnap.yml");
+			Logger.log("Loaded configuration: stacksnap.yml");
 			System.out.println(configuration);
 		} catch (Exception e) {
 			System.err.println("Error loading configuration: stacksnap.yml");
@@ -190,7 +191,7 @@ public class StacksnapConfigurationBuilder {
 
 			
 		} catch (Exception e) {
-			System.out.println("[stacksnap] Configuration Error: " + e.getMessage());
+			Logger.log("Configuration Error" + e.getMessage());
 			e.printStackTrace();
 		}
 		return current;
@@ -270,7 +271,7 @@ public class StacksnapConfigurationBuilder {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("[stacksnap] Configuration Error: " + e.getMessage());
+			Logger.log("Configuration Error" + e.getMessage());
 			e.printStackTrace();
 		}
 		return current;

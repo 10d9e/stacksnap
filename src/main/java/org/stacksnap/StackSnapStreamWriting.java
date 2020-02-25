@@ -74,6 +74,10 @@ class StackSnapStreamWriting implements Listener {
 	public Listener withErrorsOnly() {
 		return new WithErrorsOnly(this);
 	}
+	
+	public void log(String format, Object ... args) {
+		printStream.printf(PREFIX + " " + format, args);
+	}
 
 	/**
 	 * {@inheritDoc}
