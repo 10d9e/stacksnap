@@ -10,7 +10,7 @@ public class Attach {
 
 		File jarFile = new File("../stacksnap/target/stacksnap-0.0.1-SNAPSHOT.jar");
 		
-		String processId = "44088";
+		String processId = "44674";
 		ByteBuddyAgent.attach(jarFile, processId);
 
 	}

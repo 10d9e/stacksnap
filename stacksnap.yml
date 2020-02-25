@@ -1,0 +1,85 @@
+version: 1.0
+type:
+  match:
+    nameMatches:
+      - 'org.myapp.test.*'
+
+    # named: 
+    #  - 'org.myapp.test.NewTestTimed'
+
+    # namedIgnoreCase:
+
+    # nameEndsWith: 
+    #  - 'Timed'
+    
+    # nameEndsWithIgnoreCase:
+    # nameStartsWith:
+    # nameContains:
+    # nameContainsIgnoreCase:
+
+    # isPublic: true
+    # isProtected: true
+    # isPackagePrivate: true
+    # isStatic: true
+    # isFinal: true
+
+    # isAnnotatedWith:
+    #  - 'org.myapp.test.TestAnnotation'
+
+    # isSubTypeOf:
+    
+    # isSuperTypeOf:
+    
+    # hasSuperClass:
+    #  - 'org.myapp.test.MyBaseClass'
+
+    # hasAnnotation:
+    #  - 'org.myapp.test.TestAnnotation'
+    
+    # declaresField:
+    #  - 'age'
+    
+    # declaresMethod:
+    #  - 'test2'
+
+  ignore:
+    # nameMatches:
+    #  - 'org.myapp.test.*'
+
+    # named: 
+    #  - 'org.myapp.test.NewTestTimed'
+
+    # namedIgnoreCase:
+
+    # nameEndsWith: 
+    #  - 'Timed'
+    
+    # nameEndsWithIgnoreCase:
+    # nameStartsWith:
+    # nameContains:
+    # nameContainsIgnoreCase:
+
+    # isPublic: true
+    # isProtected: true
+    # isPackagePrivate: true
+    # isStatic: true
+    # isFinal: true
+
+    # isAnnotatedWith:
+    #  - 'org.myapp.test.TestAnnotation'
+
+    # isSubTypeOf:
+    
+    # isSuperTypeOf:
+    
+    # hasSuperClass:
+    #  - 'org.myapp.test.MyBaseClass'
+
+    # hasAnnotation:
+    #  - 'org.myapp.test.TestAnnotation'
+    
+    #declaresField:
+    #  - 'age'
+    
+    # declaresMethod:
+    #  - 'test2'
