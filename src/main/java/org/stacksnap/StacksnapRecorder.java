@@ -32,7 +32,6 @@ public class StacksnapRecorder {
 			Logger.log( String.format("\t%s, %s, %s, %s, %s, %s, %s", e.getClassLoaderName(), e.getClassName(), e.getFileName(), e.getLineNumber(), e.getMethodName(), e.getModuleName(), e.getModuleVersion()  ) );
 		}
 
-		
 	}
 
 }

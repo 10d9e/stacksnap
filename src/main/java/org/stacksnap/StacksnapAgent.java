@@ -27,12 +27,13 @@ public class StacksnapAgent {
 
 		agentBuilder
 				.ignore(nameStartsWith("net.bytebuddy")
+						.or(nameStartsWith("org.stacksnap"))
+						.or(nameStartsWith("com.yevdo.jwildcard"))
 						.or(nameStartsWith("com.thoughtworks.xstream"))
 						.or(nameStartsWith("org.xmlpull"))
 						.or(nameStartsWith("jdk"))
 						.or(nameStartsWith("java"))
 						.or(nameStartsWith("sun"))
-						.or(nameStartsWith("org.stacksnap"))
 						.or(nameStartsWith("com.sun"))
 						.or(nameStartsWith("org.yaml"))
 						.or(config.typeIgnores())
