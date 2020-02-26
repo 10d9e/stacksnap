@@ -25,9 +25,9 @@ public final class Camera {
 		xstream.alias("Snapshot", Snapshot.class);
 	}
 
-	public static <T> String snap(T target, Method method, Object[] args, Throwable error) {
+	public static <T> String snap(long threadId, Entrance entrance, T target, Method method, Object[] args, Throwable error) {
 		try {
-			Snapshot snap = new Snapshot(target, method, error, args);
+			Snapshot snap = new Snapshot(threadId, entrance, target, method, error, args);
 
 			final String filename = SNAP_DIRECTORY + File.separator + target.getClass().getName() + "-"
 					+ SDF.format(new Date());
@@ -102,7 +102,7 @@ public final class Camera {
 
 		Method m = t.getClass().getDeclaredMethod("doIt");
 
-		String filename = Camera.snap(t, m, new Object[] {}, new Exception("Fna"));
+		String filename = Camera.snap(Thread.currentThread().getId(), Entrance.ENTER, t, m, new Object[] {}, new Exception("Fna"));
 
 		Test restored = Camera.restore(filename);
 		System.out.println(restored);

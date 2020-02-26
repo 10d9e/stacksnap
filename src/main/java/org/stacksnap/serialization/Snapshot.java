@@ -3,6 +3,10 @@ package org.stacksnap.serialization;
 import java.lang.reflect.Method;
 
 public class Snapshot {
+	
+	private Entrance entrance;
+	
+	private long threadId;
 
 	private Object target;
 
@@ -15,11 +19,22 @@ public class Snapshot {
 	public Snapshot() {
 	}
 
-	public Snapshot(Object target, Method method, Throwable error, Object[] arguments) {
+	public Snapshot(long threadId, Entrance entrance, Object target, Method method, Throwable error, Object[] arguments) {
 		super();
+		this.threadId = threadId;
+		this.entrance = entrance;
 		this.target = target;
 		this.method = method;
 		this.error = error;
+		this.arguments = arguments;
+	}
+	
+	public Snapshot(long threadId, Entrance entrance, Object target, Method method, Object[] arguments) {
+		super();
+		this.threadId = threadId;
+		this.entrance = entrance;
+		this.target = target;
+		this.method = method;
 		this.arguments = arguments;
 	}
 
@@ -53,6 +68,22 @@ public class Snapshot {
 
 	public void setArguments(Object[] arguments) {
 		this.arguments = arguments;
+	}
+
+	public Entrance getEntrance() {
+		return entrance;
+	}
+
+	public void setEntrance(Entrance entrance) {
+		this.entrance = entrance;
+	}
+
+	public long getThreadId() {
+		return threadId;
+	}
+
+	public void setThreadId(long threadId) {
+		this.threadId = threadId;
 	}
 
 }

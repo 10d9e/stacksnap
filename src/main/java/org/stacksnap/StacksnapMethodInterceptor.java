@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import org.stacksnap.serialization.Camera;
+import org.stacksnap.serialization.Entrance;
 
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Origin;
@@ -34,7 +35,7 @@ public class StacksnapMethodInterceptor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			if(obj != null) {
-				String file = Camera.snap(obj, method, args, e);
+				String file = Camera.snap(Thread.currentThread().getId(), Entrance.EXIT, obj, method, args, e);
 				System.out.println(file);
 			}
 		} finally {

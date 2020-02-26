@@ -3,6 +3,7 @@ package org.stacksnap;
 import java.lang.reflect.Method;
 
 import org.stacksnap.serialization.Camera;
+import org.stacksnap.serialization.Entrance;
 
 import net.bytebuddy.asm.Advice;
 
@@ -29,7 +30,7 @@ public class StacksnapExceptionHandler {
 		}
 		*/
 		if (e != null) {
-			Camera.snap(instance, method, arguments, e);
+			Camera.snap(Thread.currentThread().getId(), Entrance.EXIT, instance, method, arguments, e);
 		}
 	}
 
