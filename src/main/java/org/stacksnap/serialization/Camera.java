@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.stacksnap.Logger;
+import org.stacksnap.agent.Logger;
 
 import com.thoughtworks.xstream.XStream;
 

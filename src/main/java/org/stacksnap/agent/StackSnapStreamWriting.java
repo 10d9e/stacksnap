@@ -1,4 +1,4 @@
-package org.stacksnap;
+package org.stacksnap.agent;
 
 import java.io.PrintStream;
 

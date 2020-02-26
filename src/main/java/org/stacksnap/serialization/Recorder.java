@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.stacksnap.Logger;
+import org.stacksnap.agent.Logger;
 
 import com.thoughtworks.xstream.XStream;
 

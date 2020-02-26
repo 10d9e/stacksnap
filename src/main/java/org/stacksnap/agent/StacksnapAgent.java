@@ -1,4 +1,4 @@
-package org.stacksnap;
+package org.stacksnap.agent;
 
 import java.lang.instrument.Instrumentation;
 
@@ -42,7 +42,7 @@ public class StacksnapAgent {
 				.transform((builder, type, classLoader, module) -> builder
 						.visit(Advice.to(StacksnapExceptionHandler.class).on(isMethod().and(config.methodMatches())))
 						
-						.visit(Advice.to(StacksnapRecorder.class).on(isMethod()))
+						.visit(Advice.to(StacksnapRecorder.class).on(isMethod().and(config.methodMatches())))
 						
 				)
 						

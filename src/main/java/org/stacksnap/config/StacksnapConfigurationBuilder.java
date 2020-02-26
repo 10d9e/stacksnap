@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.stacksnap.Logger;
+import org.stacksnap.agent.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -48,7 +48,7 @@ public class StacksnapConfigurationBuilder {
 				|| configuration.getTypes().getMatch() == null) {
 			return none();
 		}
-		Junction<?> current = any();
+		Junction<?> current = none();
 		boolean valid = configuration.getTypes().getMatch().isValid();
 		if (configuration != null && valid == true ) {		
 			current = typeCombiner(current, configuration.getTypes().getMatch());
@@ -74,7 +74,7 @@ public class StacksnapConfigurationBuilder {
 	}
 	
 	public ElementMatcher<? super MethodDescription> methodMatches() {
-		Junction<?> current = isMethod();
+		Junction<?> current = none();
 		if (configuration != null) {
 			current = methodCombiner(current, configuration.getMethods().getMatch());
 		}
@@ -95,39 +95,39 @@ public class StacksnapConfigurationBuilder {
 		}
 		
 		for (String s : elem.getNameEndsWith()) {
-			current = current.and(nameEndsWith(s));
+			current = current.or(nameEndsWith(s));
 		}
 		
 		for (String s : elem.getNameContains()) {
-			current = current.and(nameContains(s));
+			current = current.or(nameContains(s));
 		}
 
 		for (String s : elem.getNameContainsIgnoreCase()) {
-			current = current.and(nameContainsIgnoreCase(s));
+			current = current.or(nameContainsIgnoreCase(s));
 		}
 
 		for (String s : elem.getNamed()) {
-			current = current.and(named(s));
+			current = current.or(named(s));
 		}
 
 		for (String s : elem.getNamedIgnoreCase()) {
-			current = current.and(namedIgnoreCase(s));
+			current = current.or(namedIgnoreCase(s));
 		}
 
 		for (String s : elem.getNameEndsWith()) {
-			current = current.and(nameEndsWith(s));
+			current = current.or(nameEndsWith(s));
 		}
 
 		for (String s : elem.getNameEndsWithIgnoreCase()) {
-			current = current.and(nameEndsWithIgnoreCase(s));
+			current = current.or(nameEndsWithIgnoreCase(s));
 		}
 
 		for (String s : elem.getNameRegex()) {
-			current = current.and(nameMatches(s));
+			current = current.or(nameMatches(s));
 		}
 		
 		for (String s : elem.getNameMatches()) {
-			current = current.and(nameMatches(JWildcard.wildcardToRegex(s)));
+			current = current.or(nameMatches(JWildcard.wildcardToRegex(s)));
 		}
 		
 		return current;
@@ -144,61 +144,61 @@ public class StacksnapConfigurationBuilder {
 
 			for (String s : elem.getDeclaresField()) {
 				current = current
-						.and(declaresField(named(s)));
+						.or(declaresField(named(s)));
 			}
 
 			for (String s : elem.getDeclaresMethod()) {
-				current = current.and(declaresMethod(named(s)));
+				current = current.or(declaresMethod(named(s)));
 			}
 
 			for (String s : elem.getHasAnnotation()) {
-				current = current.and(hasAnnotation(
+				current = current.or(hasAnnotation(
 						annotationType((Class<? extends Annotation>) Class.forName(s))));
 			}
 
 			for (String s : elem.getHasSuperClass()) {
-				current = current.and(hasSuperClass(named(s)));
+				current = current.or(hasSuperClass(named(s)));
 			}
 			
 			for (String s : elem.getHasSuperType()) {
-				current = current.and(hasSuperType(named(s)));
+				current = current.or(hasSuperType(named(s)));
 			}
 
 			for (String s : elem.getIsAnnotatedWith()) {
 				current = current
-						.and(isAnnotatedWith((Class<? extends Annotation>) Class.forName(s)));
+						.or(isAnnotatedWith((Class<? extends Annotation>) Class.forName(s)));
 			}
 
 			if (elem.getIsFinal() == true) {
-				current = current.and(isFinal());
+				current = current.or(isFinal());
 			}
 
 			if (elem.getIsPackagePrivate() == true) {
-				current = current.and(isPackagePrivate());
+				current = current.or(isPackagePrivate());
 			}
 
 			if (elem.getIsProtected() == true) {
-				current = current.and(isProtected());
+				current = current.or(isProtected());
 			}
 
 			if (elem.getIsPublic() == true) {
-				current = current.and(isPublic());
+				current = current.or(isPublic());
 			}
 			
 			if (elem.getIsPrivate() == true) {
-				current = current.and(isPrivate());
+				current = current.or(isPrivate());
 			}
 
 			if (elem.getIsStatic() == true) {
-				current = current.and(isStatic());
+				current = current.or(isStatic());
 			}
 
 			for (String s : elem.getIsSubTypeOf()) {
-				current = current.and(isSubTypeOf(Class.forName(s)));
+				current = current.or(isSubTypeOf(Class.forName(s)));
 			}
 
 			for (String s : elem.getIsSuperTypeOf()) {
-				current = current.and(isSuperTypeOf(Class.forName(s)));
+				current = current.or(isSuperTypeOf(Class.forName(s)));
 			}
 
 			
@@ -219,67 +219,67 @@ public class StacksnapConfigurationBuilder {
 
 			for (String s : elem.getIsAnnotatedWith()) {
 				current = current
-						.and(isAnnotatedWith((Class<? extends Annotation>) Class.forName(s)));
+						.or(isAnnotatedWith((Class<? extends Annotation>) Class.forName(s)));
 			}
 
 			if (elem.getIsFinal() == true) {
-				current = current.and(isFinal());
+				current = current.or(isFinal());
 			}
 
 			if (elem.getIsPackagePrivate() == true) {
-				current = current.and(isPackagePrivate());
+				current = current.or(isPackagePrivate());
 			}
 
 			if (elem.getIsProtected() == true) {
-				current = current.and(isProtected());
+				current = current.or(isProtected());
 			}
 
 			if (elem.getIsPublic() == true) {
-				current = current.and(isPublic());
+				current = current.or(isPublic());
 			}
 			
 			if (elem.getIsPrivate() == true) {
-				current = current.and(isPrivate());
+				current = current.or(isPrivate());
 			}
 
 			if (elem.getIsStatic() == true) {
-				current = current.and(isStatic());
+				current = current.or(isStatic());
 			}
 			
 			if (elem.getIsSynchronized() == true) {
-				current = current.and(isSynchronized());
+				current = current.or(isSynchronized());
 			}
 			
 			if (elem.getIsStrict() == true) {
-				current = current.and(isStrict());
+				current = current.or(isStrict());
 			}
 
 			for (String s : elem.getCanThrow()) {
-				current = current.and(canThrow((Class<? extends Exception>) Class.forName(s)));
+				current = current.or(canThrow((Class<? extends Exception>) Class.forName(s)));
 			}
 			
 			for (String s : elem.getDeclaresException()) {
-				current = current.and(declaresException((Class<? extends Exception>) Class.forName(s)));
+				current = current.or(declaresException((Class<? extends Exception>) Class.forName(s)));
 			}
 			
 			for (String s : elem.getIsOverriddenFrom()) {
-				current = current.and(isOverriddenFrom(Class.forName(s)));
+				current = current.or(isOverriddenFrom(Class.forName(s)));
 			}
 			
 			if (elem.getIsVirtual() == true) {
-				current = current.and(isVirtual());
+				current = current.or(isVirtual());
 			}
 			
 			if (elem.getIsDefaultMethod() == true) {
-				current = current.and(isDefaultMethod());
+				current = current.or(isDefaultMethod());
 			}
 			
 			if (elem.getIsSetter() == true) {
-				current = current.and(isSetter());
+				current = current.or(isSetter());
 			}
 			
 			if (elem.getIsGetter() == true) {
-				current = current.and(isGetter());
+				current = current.or(isGetter());
 			}
 			
 		} catch (Exception e) {

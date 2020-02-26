@@ -1,4 +1,4 @@
-package org.stacksnap;
+package org.stacksnap.agent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

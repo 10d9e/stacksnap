@@ -66,8 +66,8 @@
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Premain-Class>org.stacksnap.StacksnapAgent</Premain-Class>
-										<Agent-Class>org.stacksnap.StacksnapAgent</Agent-Class>
+                                        <Premain-Class>org.stacksnap.agent.StacksnapAgent</Premain-Class>
+										<Agent-Class>org.stacksnap.agent.StacksnapAgent</Agent-Class>
 										<Can-Redefine-Classes>true</Can-Redefine-Classes>
 										<Can-Retransform-Classes>true</Can-Retransform-Classes>
 										<Can-Set-Native-Method-Prefix>false</Can-Set-Native-Method-Prefix>
