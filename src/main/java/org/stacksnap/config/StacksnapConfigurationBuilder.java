@@ -26,7 +26,6 @@ public class StacksnapConfigurationBuilder {
 		try {
 			this.configuration = yaml.load(Files.readString(Paths.get("stacksnap.yml")));
 			Logger.log("Loaded configuration: stacksnap.yml");
-			System.out.println(configuration);
 		} catch (Exception e) {
 			System.err.println("Error loading configuration: stacksnap.yml");
 		}
@@ -39,30 +38,43 @@ public class StacksnapConfigurationBuilder {
 	public StacksnapConfigurationBuilder(String configPath) throws Exception {
 		super();
 		this.configuration = yaml.load(Files.readString(Paths.get(configPath)));
-		System.out.println(configuration);
 	}
 	
 	
 
 	@SuppressWarnings("unchecked")
 	public ElementMatcher<? super TypeDescription> typeMatches() {
+		if(configuration.getTypes() == null
+				|| configuration.getTypes().getMatch() == null) {
+			return none();
+		}
 		Junction<?> current = any();
-		if (configuration != null) {			
+		boolean valid = configuration.getTypes().getMatch().isValid();
+		if (configuration != null && valid == true ) {		
 			current = typeCombiner(current, configuration.getTypes().getMatch());
+		} else {
+			current = none();
 		}
 		return (ElementMatcher<? super TypeDescription>) current;
 	}
 	
 	public ElementMatcher<? super TypeDescription> typeIgnores() {
+		if(configuration.getTypes() == null
+				|| configuration.getTypes().getIgnore() == null) {
+			return none();
+		}
 		Junction<?> current = any();
-		if (configuration != null) {
+		boolean valid = configuration.getTypes().getIgnore().isValid();
+		if (configuration != null && valid == true ) {
 			current = typeCombiner(current, configuration.getTypes().getIgnore());
+		}else {
+			current = none();
 		}
 		return (ElementMatcher<? super TypeDescription>) current;
 	}
 	
 	public ElementMatcher<? super MethodDescription> methodMatches() {
-		Junction<?> current = any();
+		Junction<?> current = isMethod();
 		if (configuration != null) {
 			current = methodCombiner(current, configuration.getMethods().getMatch());
 		}

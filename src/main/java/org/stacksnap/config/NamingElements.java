@@ -15,6 +15,18 @@ public class NamingElements {
 	
 	private Set<String> nameMatches = new TreeSet<String>(); 
 
+	public boolean isValid() {
+		return !nameEndsWith.isEmpty() 
+			   || !nameEndsWithIgnoreCase.isEmpty()
+			   || !nameStartsWith.isEmpty() 
+			   || !named.isEmpty() 
+			   || !namedIgnoreCase.isEmpty() 
+			   || !nameContains.isEmpty() 
+			   || !nameContainsIgnoreCase.isEmpty() 
+			   || !nameRegex.isEmpty() 
+			   || !nameMatches.isEmpty();
+	}
+	
 	public Set<String> getNameEndsWith() {
 		return nameEndsWith;
 	}

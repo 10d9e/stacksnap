@@ -77,6 +77,7 @@ class StackSnapStreamWriting implements Listener {
 	
 	public void log(String format, Object ... args) {
 		printStream.printf(PREFIX + " " + format, args);
+		printStream.printf("\n");
 	}
 
 	/**

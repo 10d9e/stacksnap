@@ -22,6 +22,7 @@ public final class Camera {
 	static {
 		XStream.setupDefaultSecurity(xstream);
 		xstream.allowTypesByWildcard(new String[] { "**.*" });
+		xstream.alias("Snapshot", Snapshot.class);
 	}
 
 	public static <T> String snap(T target, Method method, Object[] args, Throwable error) {

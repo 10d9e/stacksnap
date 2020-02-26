@@ -22,6 +22,25 @@ public class BaseType extends NamingElements {
 	private boolean isStatic;
 	private boolean isFinal;
 
+	public boolean isValid() {
+		return super.isValid()
+				|| !isAnnotatedWith.isEmpty() 
+				|| !isSubTypeOf.isEmpty()
+				|| !isSuperTypeOf.isEmpty()
+				|| !hasSuperClass.isEmpty()
+				|| !hasSuperType.isEmpty()
+				|| !hasAnnotation.isEmpty()
+				|| !declaresField.isEmpty()
+				|| !declaresMethod.isEmpty()
+				|| isPrivate == true
+				|| isPublic == true
+				|| isProtected == true
+				|| isPackagePrivate == true
+				|| isStatic == true
+				|| isFinal == true
+				;
+	}
+	
 	public BaseType() {
 	}
 

@@ -16,7 +16,7 @@ public class StacksnapAgent {
 	}
 
 	public static void premain(String arguments, Instrumentation instrumentation) {
-		System.out.println("[stacksnap] Welcome to Stacksnap.");
+		Logger.log("[stacksnap] Welcome to Stacksnap.");
 
 		StacksnapConfigurationBuilder config = new StacksnapConfigurationBuilder();
 
@@ -26,13 +26,25 @@ public class StacksnapAgent {
 		agentBuilder = handleLogging(config, agentBuilder);
 
 		agentBuilder
-				.ignore(anyOf(nameMatches("org.stacksnap.*"), nameMatches("com.thoughtworks.xstream.*"),
-						nameMatches("net.bytebuddy.*"), nameMatches("org.yaml.snakeyaml.*"), nameMatches("java.*"),
-						nameMatches("javax.*"), nameMatches("sun.*"), nameMatches("jdk.*"), nameMatches("com.sun.*"),
-						config.typeIgnores()))
+				.ignore(nameStartsWith("net.bytebuddy")
+						.or(nameStartsWith("com.thoughtworks.xstream"))
+						.or(nameStartsWith("org.xmlpull"))
+						.or(nameStartsWith("jdk"))
+						.or(nameStartsWith("java"))
+						.or(nameStartsWith("sun"))
+						.or(nameStartsWith("org.stacksnap"))
+						.or(nameStartsWith("com.sun"))
+						.or(nameStartsWith("org.yaml"))
+						.or(config.typeIgnores())
+				)
 				.type(config.typeMatches())
 				.transform((builder, type, classLoader, module) -> builder
-						.visit(Advice.to(StacksnapAdviceHandler.class).on(isMethod().and(config.methodMatches()))))
+						.visit(Advice.to(StacksnapExceptionHandler.class).on(isMethod().and(config.methodMatches())))
+						
+						.visit(Advice.to(StacksnapRecorder.class).on(isMethod()))
+						
+				)
+						
 				.installOn(instrumentation);
 
 	}

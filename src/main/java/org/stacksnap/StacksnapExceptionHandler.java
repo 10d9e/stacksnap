@@ -6,7 +6,7 @@ import org.stacksnap.serialization.Camera;
 
 import net.bytebuddy.asm.Advice;
 
-public class StacksnapAdviceHandler {
+public class StacksnapExceptionHandler {
 
 	/*
 	@Advice.OnMethodEnter
