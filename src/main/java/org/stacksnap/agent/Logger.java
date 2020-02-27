@@ -23,4 +23,8 @@ public final class Logger {
 		instance.log(format, args);
 	}
 
+	public static void error(String string) {
+		instance.error(string);
+	}
+
 }

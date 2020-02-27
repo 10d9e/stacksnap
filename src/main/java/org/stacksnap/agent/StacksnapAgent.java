@@ -17,10 +17,14 @@ public class StacksnapAgent {
 	}
 
 	public static void premain(String arguments, Instrumentation instrumentation) {
-		Logger.log("[stacksnap] Welcome to Stacksnap.");
+		Logger.log("Welcome to Stacksnap.");
 
 		StacksnapConfiguration config = StacksnapConfigurationBuilder.build();
 
+		if(config == null) {
+			return;
+		}
+		
 		AgentBuilder agentBuilder = new AgentBuilder.Default().disableClassFormatChanges()
 				.with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
 

@@ -33,9 +33,13 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.namedIgnoreCase;
 import static net.bytebuddy.matcher.ElementMatchers.none;
 
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 import org.stacksnap.agent.Logger;
 import org.yaml.snakeyaml.Yaml;
@@ -53,19 +57,37 @@ public class StacksnapConfigurationBuilder {
 	private static Yaml yaml = new Yaml(new Constructor(StacksnapConfiguration.class));
 
 	private static StacksnapConfiguration configuration;
-	
+
 	public static StacksnapConfiguration build() {
 		try {
-			configuration = yaml.load(Files.readString(Paths.get("stacksnap.yml")));
-			Logger.log("Loaded configuration: stacksnap.yml");
+			Path p = Paths.get("stacksnap.yml");
+			configuration = yaml.load(Files.readString(p));
+			Logger.log("Loaded configuration: 'stacksnap.yml'");
 		} catch (Exception e) {
-			Logger.log("Error loading configuration: stacksnap.yml");
+			Logger.error("Error loading configuration: 'stacksnap.yml'");
+			printPathError();
 		}
 		return configuration;
 	}
 
+	private static void printPathError() {
+
+		Logger.error("Please setup 'stacksnap.yml' configuration file on your classpath");
+
+		InputStream inputStream = StacksnapConfigurationBuilder.class
+				.getResourceAsStream("/org/stacksnap/config/configuration-template.yml");
+		String text = null;
+		try (Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8.name())) {
+			text = scanner.useDelimiter("\\A").next();
+		}
+		Logger.error("*************** START stacksnap.yml ***************");
+		Logger.error(text);
+		Logger.error("**************** END stacksnap.yml ****************");
+
+	}
+
 	public static StacksnapConfiguration getConfiguration() {
-		if(configuration == null) {
+		if (configuration == null) {
 			build();
 		}
 		return configuration;
@@ -86,8 +108,7 @@ public class StacksnapConfigurationBuilder {
 
 	@SuppressWarnings("unchecked")
 	public static ElementMatcher<? super TypeDescription> typeIgnores() {
-		if ( configuration.getTypes() == null
-				|| configuration.getTypes().getIgnore() == null) {
+		if (configuration.getTypes() == null || configuration.getTypes().getIgnore() == null) {
 			return none();
 		}
 		Junction<?> current = none();

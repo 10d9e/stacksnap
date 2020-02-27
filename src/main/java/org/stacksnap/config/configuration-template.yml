@@ -1,0 +1,24 @@
+
+# Create stacksnap.yml file and add the following 
+# contents to define type and method interception
+# points
+# Class types to be instrumented by stacksnap
+types:
+    # Match section to configure type matchers
+    include:
+        nameMatches:
+            - 'org.yourapp.*'
+# error method filters
+error:
+    # Methods to be instrumented by errors
+    methods:
+        include:
+            nameMatches:
+                - '*'
+# record method filters
+record:
+    # Methods to be instrumented for recording
+    methods:
+        include:
+            nameMatches:
+                - '*'

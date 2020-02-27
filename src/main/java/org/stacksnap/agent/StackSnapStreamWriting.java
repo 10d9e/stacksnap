@@ -79,6 +79,10 @@ class StackSnapStreamWriting implements Listener {
 		printStream.printf(PREFIX + " " + format, args);
 		printStream.printf("\n");
 	}
+	
+	public void error(String text) {
+		System.err.println(PREFIX + " " + text);
+	}
 
 	/**
 	 * {@inheritDoc}
