@@ -10,12 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.stacksnap.agent.Logger;
+import org.stacksnap.config.StacksnapConfigurationBuilder;
 
 import com.thoughtworks.xstream.XStream;
 
 public final class Recorder {
-
-	public static final String SNAP_DIRECTORY = "snap";
 
 	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss.SSS");
 
@@ -36,11 +35,7 @@ public final class Recorder {
 	public static <T> void append(long threadId, Entrance entrance, T target, Method method, Object[] args, Throwable error) {
 		try {
 			Snapshot snapshot = new Snapshot(threadId, entrance, target, method, error, args);
-			Logger.log("Recording Snapshot: " + snapshot);
-			recording.add(snapshot);
-
-			Logger.log("current recording" + recording);
-			
+			recording.add(snapshot);			
 		} catch (Exception e) {
 			Logger.log("Error creating snapshot: " + e.getMessage());
 			e.printStackTrace();
@@ -49,7 +44,8 @@ public final class Recorder {
 	}
 
 	public static String persist() {
-
+		final String SNAP_DIRECTORY = StacksnapConfigurationBuilder.getConfiguration().getPath();
+		
 		final String filename = SNAP_DIRECTORY + File.separator + "recording-" + SDF.format(new Date());
 		try {
 			String xml = xstream.toXML(recording);

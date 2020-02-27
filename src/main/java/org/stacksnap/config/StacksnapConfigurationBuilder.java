@@ -1,5 +1,38 @@
 package org.stacksnap.config;
 
+import static net.bytebuddy.matcher.ElementMatchers.annotationType;
+import static net.bytebuddy.matcher.ElementMatchers.canThrow;
+import static net.bytebuddy.matcher.ElementMatchers.declaresException;
+import static net.bytebuddy.matcher.ElementMatchers.declaresField;
+import static net.bytebuddy.matcher.ElementMatchers.declaresMethod;
+import static net.bytebuddy.matcher.ElementMatchers.hasAnnotation;
+import static net.bytebuddy.matcher.ElementMatchers.hasSuperClass;
+import static net.bytebuddy.matcher.ElementMatchers.hasSuperType;
+import static net.bytebuddy.matcher.ElementMatchers.isAnnotatedWith;
+import static net.bytebuddy.matcher.ElementMatchers.isDefaultMethod;
+import static net.bytebuddy.matcher.ElementMatchers.isFinal;
+import static net.bytebuddy.matcher.ElementMatchers.isGetter;
+import static net.bytebuddy.matcher.ElementMatchers.isOverriddenFrom;
+import static net.bytebuddy.matcher.ElementMatchers.isPackagePrivate;
+import static net.bytebuddy.matcher.ElementMatchers.isPrivate;
+import static net.bytebuddy.matcher.ElementMatchers.isProtected;
+import static net.bytebuddy.matcher.ElementMatchers.isPublic;
+import static net.bytebuddy.matcher.ElementMatchers.isSetter;
+import static net.bytebuddy.matcher.ElementMatchers.isStatic;
+import static net.bytebuddy.matcher.ElementMatchers.isStrict;
+import static net.bytebuddy.matcher.ElementMatchers.isSubTypeOf;
+import static net.bytebuddy.matcher.ElementMatchers.isSuperTypeOf;
+import static net.bytebuddy.matcher.ElementMatchers.isSynchronized;
+import static net.bytebuddy.matcher.ElementMatchers.isVirtual;
+import static net.bytebuddy.matcher.ElementMatchers.nameContains;
+import static net.bytebuddy.matcher.ElementMatchers.nameContainsIgnoreCase;
+import static net.bytebuddy.matcher.ElementMatchers.nameEndsWith;
+import static net.bytebuddy.matcher.ElementMatchers.nameEndsWithIgnoreCase;
+import static net.bytebuddy.matcher.ElementMatchers.nameMatches;
+import static net.bytebuddy.matcher.ElementMatchers.named;
+import static net.bytebuddy.matcher.ElementMatchers.namedIgnoreCase;
+import static net.bytebuddy.matcher.ElementMatchers.none;
+
 import java.lang.annotation.Annotation;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,69 +47,102 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatcher.Junction;
-import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public class StacksnapConfigurationBuilder {
 
-	private Yaml yaml = new Yaml(new Constructor(StacksnapConfiguration.class));
+	private static Yaml yaml = new Yaml(new Constructor(StacksnapConfiguration.class));
 
-	private StacksnapConfiguration configuration;
-
-	public StacksnapConfigurationBuilder() {
+	private static StacksnapConfiguration configuration;
+	
+	public static StacksnapConfiguration build() {
 		try {
-			this.configuration = yaml.load(Files.readString(Paths.get("stacksnap.yml")));
+			configuration = yaml.load(Files.readString(Paths.get("stacksnap.yml")));
 			Logger.log("Loaded configuration: stacksnap.yml");
 		} catch (Exception e) {
-			System.err.println("Error loading configuration: stacksnap.yml");
+			Logger.log("Error loading configuration: stacksnap.yml");
 		}
-	}
-
-	public StacksnapConfiguration getConfiguration() {
 		return configuration;
 	}
 
-	public StacksnapConfigurationBuilder(String configPath) throws Exception {
-		super();
-		this.configuration = yaml.load(Files.readString(Paths.get(configPath)));
+	public static StacksnapConfiguration getConfiguration() {
+		if(configuration == null) {
+			build();
+		}
+		return configuration;
 	}
 
 	@SuppressWarnings("unchecked")
-	public ElementMatcher<? super TypeDescription> typeIncludes() {
-
+	public static ElementMatcher<? super TypeDescription> typeIncludes() {
+		if (configuration.getTypes() == null || configuration.getTypes().getInclude() == null) {
+			return none();
+		}
 		Junction<?> current = none();
 		boolean valid = configuration.getTypes().getInclude().checkValid();
-		if (configuration != null && valid == true) {
+		if (valid == true) {
 			current = typeCombiner(current, configuration.getTypes().getInclude());
 		}
 		return (ElementMatcher<? super TypeDescription>) current;
 	}
 
-	public ElementMatcher<? super TypeDescription> typeIgnores() {
+	@SuppressWarnings("unchecked")
+	public static ElementMatcher<? super TypeDescription> typeIgnores() {
+		if ( configuration.getTypes() == null
+				|| configuration.getTypes().getIgnore() == null) {
+			return none();
+		}
 		Junction<?> current = none();
 		boolean valid = configuration.getTypes().getIgnore().checkValid();
-		if (configuration != null && valid == true) {
+		if (valid == true) {
 			current = typeCombiner(current, configuration.getTypes().getIgnore());
 		}
 		return (ElementMatcher<? super TypeDescription>) current;
 	}
 
-	public ElementMatcher<? super MethodDescription> methodMatches() {
-		Junction<?> current = none();
-		if (configuration != null) {
-			current = methodCombiner(current, configuration.getMethods().getInclude());
+	@SuppressWarnings("unchecked")
+	public static ElementMatcher<? super MethodDescription> errorMethodIncludes() {
+		if (configuration.getError() == null || configuration.getError().getMethods() == null
+				|| configuration.getError().getMethods().getInclude() == null) {
+			return none();
 		}
+		Junction<?> current = none();
+		current = methodCombiner(current, configuration.getError().getMethods().getInclude());
 		return (ElementMatcher<? super MethodDescription>) current;
 	}
 
-	public ElementMatcher<? super MethodDescription> methodIgnores() {
-		Junction<?> current = none();
-		if (configuration != null) {
-			current = methodCombiner(current, configuration.getMethods().getIgnore());
+	@SuppressWarnings("unchecked")
+	public static ElementMatcher<? super MethodDescription> recordMethodIncludes() {
+		if (configuration.getRecord() == null || configuration.getRecord().getMethods() == null
+				|| configuration.getRecord().getMethods().getInclude() == null) {
+			return none();
 		}
+		Junction<?> current = none();
+		current = methodCombiner(current, configuration.getRecord().getMethods().getInclude());
 		return (ElementMatcher<? super MethodDescription>) current;
 	}
 
-	private Junction<?> namesCombiner(Junction<?> current, CommonElements elem) {
+	@SuppressWarnings("unchecked")
+	public static ElementMatcher<? super MethodDescription> errorMethodIgnores() {
+		if (configuration.getError() == null || configuration.getError().getMethods() == null
+				|| configuration.getError().getMethods().getIgnore() == null) {
+			return none();
+		}
+		Junction<?> current = none();
+		current = methodCombiner(current, configuration.getError().getMethods().getIgnore());
+		return (ElementMatcher<? super MethodDescription>) current;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ElementMatcher<? super MethodDescription> recordMethodIgnores() {
+		if (configuration.getRecord() == null || configuration.getRecord().getMethods() == null
+				|| configuration.getRecord().getMethods().getIgnore() == null) {
+			return none();
+		}
+		Junction<?> current = none();
+		current = methodCombiner(current, configuration.getRecord().getMethods().getIgnore());
+		return (ElementMatcher<? super MethodDescription>) current;
+	}
+
+	private static Junction<?> namesCombiner(Junction<?> current, CommonElements elem) {
 		if (elem == null) {
 			return current;
 		}
@@ -121,7 +187,8 @@ public class StacksnapConfigurationBuilder {
 
 	}
 
-	private Junction<?> typeCombiner(Junction<?> current, BaseType elem) {
+	@SuppressWarnings("unchecked")
+	private static Junction<?> typeCombiner(Junction<?> current, BaseType elem) {
 		if (elem == null) {
 			return current;
 		}
@@ -188,7 +255,8 @@ public class StacksnapConfigurationBuilder {
 		return current;
 	}
 
-	private Junction<?> methodCombiner(Junction<?> current, BaseMethod elem) {
+	@SuppressWarnings("unchecked")
+	private static Junction<?> methodCombiner(Junction<?> current, BaseMethod elem) {
 		if (elem == null) {
 			return current;
 		}
@@ -233,11 +301,11 @@ public class StacksnapConfigurationBuilder {
 			}
 
 			for (String s : elem.getCanThrow()) {
-				current = current.or(canThrow((Class<? extends Exception>) Class.forName(s)));
+				current = current.or(canThrow((Class<? extends Throwable>) Class.forName(s)));
 			}
 
 			for (String s : elem.getDeclaresException()) {
-				current = current.or(declaresException((Class<? extends Exception>) Class.forName(s)));
+				current = current.or(declaresException((Class<? extends Throwable>) Class.forName(s)));
 			}
 
 			for (String s : elem.getIsOverriddenFrom()) {

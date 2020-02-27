@@ -8,13 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.stacksnap.agent.Logger;
+import org.stacksnap.config.StacksnapConfigurationBuilder;
 
 import com.thoughtworks.xstream.XStream;
 
 public final class Camera {
 	
-	public static final String SNAP_DIRECTORY = "snap";
-
 	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss.SSS");
 
 	private static XStream xstream = new XStream();
@@ -27,6 +26,7 @@ public final class Camera {
 
 	public static <T> String snap(long threadId, Entrance entrance, T target, Method method, Object[] args, Throwable error) {
 		try {
+			final String SNAP_DIRECTORY = StacksnapConfigurationBuilder.getConfiguration().getPath();
 			Snapshot snap = new Snapshot(threadId, entrance, target, method, error, args);
 
 			final String filename = SNAP_DIRECTORY + File.separator + target.getClass().getName() + "-"

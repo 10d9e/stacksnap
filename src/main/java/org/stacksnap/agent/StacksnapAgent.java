@@ -3,6 +3,7 @@ package org.stacksnap.agent;
 import java.lang.instrument.Instrumentation;
 
 import org.stacksnap.config.Loggable;
+import org.stacksnap.config.StacksnapConfiguration;
 import org.stacksnap.config.StacksnapConfigurationBuilder;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -18,7 +19,7 @@ public class StacksnapAgent {
 	public static void premain(String arguments, Instrumentation instrumentation) {
 		Logger.log("[stacksnap] Welcome to Stacksnap.");
 
-		StacksnapConfigurationBuilder config = new StacksnapConfigurationBuilder();
+		StacksnapConfiguration config = StacksnapConfigurationBuilder.build();
 
 		AgentBuilder agentBuilder = new AgentBuilder.Default().disableClassFormatChanges()
 				.with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
@@ -36,13 +37,13 @@ public class StacksnapAgent {
 						.or(nameStartsWith("sun"))
 						.or(nameStartsWith("com.sun"))
 						.or(nameStartsWith("org.yaml"))
-						.or(config.typeIgnores())
+						.or(StacksnapConfigurationBuilder.typeIgnores())
 				)
-				.type(config.typeIncludes())
+				.type(StacksnapConfigurationBuilder.typeIncludes())
 				.transform((builder, type, classLoader, module) -> builder
-						.visit(Advice.to(StacksnapExceptionHandler.class).on(isMethod().and(config.methodMatches())))
+						.visit(Advice.to(StacksnapExceptionHandler.class).on(isMethod().and(StacksnapConfigurationBuilder.errorMethodIncludes())))
 						
-						.visit(Advice.to(StacksnapRecorder.class).on(isMethod().and(config.methodMatches())))
+						.visit(Advice.to(StacksnapRecorder.class).on(isMethod().and(StacksnapConfigurationBuilder.recordMethodIncludes())))
 						
 				)
 						
@@ -69,14 +70,14 @@ public class StacksnapAgent {
 		return agentBuilder;
 	}
 
-	private static AgentBuilder handleLogging(StacksnapConfigurationBuilder config, AgentBuilder agentBuilder) {
-		if (config.getConfiguration().getLogging() != null) {
-			Loggable loggable = config.getConfiguration().getLogging().getSystemError();
+	private static AgentBuilder handleLogging(StacksnapConfiguration config, AgentBuilder agentBuilder) {
+		if (config.getLogging() != null) {
+			Loggable loggable = config.getLogging().getSystemError();
 			if (loggable != null) {
 				Logger.toSystemError();
 				agentBuilder = buildLog(agentBuilder, loggable);
 			}
-			loggable = config.getConfiguration().getLogging().getSystemOut();
+			loggable = config.getLogging().getSystemOut();
 			if (loggable != null) {
 				Logger.toSystemOut();
 				agentBuilder = buildLog(agentBuilder, loggable);

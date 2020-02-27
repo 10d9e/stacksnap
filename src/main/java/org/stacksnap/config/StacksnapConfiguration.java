@@ -1,21 +1,33 @@
 package org.stacksnap.config;
 
 public class StacksnapConfiguration {
-	
+
 	private float version;
-	
+
 	private Logging logging;
 	
-	private Type types;
+	private String path = "snap";
 	
-	private Method methods;
-		
-	public Type getTypes() {
-		return types;
+	private Type types;
+
+	private Section error;
+
+	private Section record;
+
+	public Section getError() {
+		return error;
 	}
 
-	public void setTypes(Type types) {
-		this.types = types;
+	public void setError(Section error) {
+		this.error = error;
+	}
+
+	public Section getRecord() {
+		return record;
+	}
+
+	public void setRecord(Section record) {
+		this.record = record;
 	}
 
 	public float getVersion() {
@@ -25,7 +37,7 @@ public class StacksnapConfiguration {
 	public void setVersion(float version) {
 		this.version = version;
 	}
-	
+
 	public Logging getLogging() {
 		return logging;
 	}
@@ -34,11 +46,20 @@ public class StacksnapConfiguration {
 		this.logging = logging;
 	}
 
-	public Method getMethods() {
-		return methods;
+	public String getPath() {
+		return path;
 	}
 
-	public void setMethods(Method methods) {
-		this.methods = methods;
+	public void setPath(String path) {
+		this.path = path;
 	}
+
+	public Type getTypes() {
+		return types;
+	}
+
+	public void setTypes(Type types) {
+		this.types = types;
+	}
+
 }
