@@ -13,7 +13,7 @@ import org.stacksnap.config.StacksnapConfigurationBuilder;
 import com.thoughtworks.xstream.XStream;
 
 public final class Camera {
-	
+
 	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss.SSS");
 
 	private static XStream xstream = new XStream();
@@ -24,7 +24,8 @@ public final class Camera {
 		xstream.alias("Snapshot", Snapshot.class);
 	}
 
-	public static <T> String snap(long threadId, Entrance entrance, T target, Method method, Object[] args, Throwable error) {
+	public static <T> String snap(long threadId, Entrance entrance, T target, Method method, Object[] args,
+			Throwable error) {
 		try {
 			final String SNAP_DIRECTORY = StacksnapConfigurationBuilder.getConfiguration().getPath();
 			Snapshot snap = new Snapshot(threadId, entrance, target, method, error, args);
@@ -102,7 +103,8 @@ public final class Camera {
 
 		Method m = t.getClass().getDeclaredMethod("doIt");
 
-		String filename = Camera.snap(Thread.currentThread().getId(), Entrance.ENTER, t, m, new Object[] {}, new Exception("Fna"));
+		String filename = Camera.snap(Thread.currentThread().getId(), Entrance.ENTER, t, m, new Object[] {},
+				new Exception("Fna"));
 
 		Test restored = Camera.restore(filename);
 		System.out.println(restored);

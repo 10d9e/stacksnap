@@ -17,68 +17,66 @@
 			<artifactId>byte-buddy</artifactId>
 			<version>1.10.8</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent -->
 		<dependency>
-		    <groupId>net.bytebuddy</groupId>
-		    <artifactId>byte-buddy-agent</artifactId>
-		    <version>1.10.8</version>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+			<version>1.10.8</version>
 		</dependency>
-		
-		
+
+
 		<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
 		<dependency>
-		    <groupId>com.thoughtworks.xstream</groupId>
-		    <artifactId>xstream</artifactId>
-		    <version>1.4.11.1</version>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.11.1</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>org.yaml</groupId>
-		    <artifactId>snakeyaml</artifactId>
-		    <version>1.21</version>            
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>1.21</version>
 		</dependency>
-		
+
 		<dependency>
-		  <groupId>com.yevdo</groupId>
-		  <artifactId>jwildcard</artifactId>
-		  <version>1.4</version>
+			<groupId>com.yevdo</groupId>
+			<artifactId>jwildcard</artifactId>
+			<version>1.4</version>
 		</dependency>
-		
-		
 	</dependencies>
 
 	<build>
 		<plugins>
-		
+
 			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Premain-Class>org.stacksnap.agent.StacksnapAgent</Premain-Class>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Premain-Class>org.stacksnap.agent.StacksnapAgent</Premain-Class>
 										<Agent-Class>org.stacksnap.agent.StacksnapAgent</Agent-Class>
 										<Can-Redefine-Classes>true</Can-Redefine-Classes>
 										<Can-Retransform-Classes>true</Can-Retransform-Classes>
 										<Can-Set-Native-Method-Prefix>false</Can-Set-Native-Method-Prefix>
-                                        <Build-Number>1.0</Build-Number>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+										<Build-Number>1.0</Build-Number>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
