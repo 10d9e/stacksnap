@@ -38,7 +38,7 @@ public class StacksnapAgent {
 						.or(nameStartsWith("org.yaml"))
 						.or(config.typeIgnores())
 				)
-				.type(config.typeMatches())
+				.type(config.typeIncludes())
 				.transform((builder, type, classLoader, module) -> builder
 						.visit(Advice.to(StacksnapExceptionHandler.class).on(isMethod().and(config.methodMatches())))
 						

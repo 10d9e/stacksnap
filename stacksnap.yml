@@ -13,8 +13,8 @@ version: 1.0
 # Class types to be instrumented by stacksnap
 types:
   
-    # Match section to configure type matchers
-    match:
+    # Include section to configure type matchers
+    include:
         # ------- #
         # "named" #
         # ------- #
@@ -102,40 +102,40 @@ types:
         #  - 'baR'
         #  - 'BaZ'
 
-        # ---------- #
-        # "isPublic" #
-        # ---------- #
+        # -------- #
+        # "public" #
+        # -------- #
         # Matches a type's modifier that is public.
         # Boolean : true or false
-        # isPublic: true
+        # public: true
 
-        # ------------- #
-        # "isProtected" #
-        # ------------- #
+        # ----------- #
+        # "protected" #
+        # ----------- #
         # Matches a type's modifier that is protected.
         # Boolean : true or false
-        # isProtected: true
+        # protected: true
         
-        # ------------------ #
-        # "isPackagePrivate" #
-        # ------------------ #
+        # ---------------- #
+        # "packagePrivate" #
+        # ---------------- #
         # Matches a type's modifier that is package private.
         # Boolean : true or false
-        # isPackagePrivate: true
+        # packagePrivate: true
         
         # ---------- #
-        # "isStatic" #
+        # "static" #
         # ---------- #
         # Matches a type's modifier that is static.
         # Boolean : true or false
-        # isStatic: true
+        # static: true
         
         # --------- #
-        # "isFinal" #
+        # "final" #
         # --------- #
         # Matches a type's modifier that is final.
         # Boolean : true or false
-        # isFinal: true
+        # final: true
 
         # ----------------- #
         # "isAnnotatedWith" #
@@ -296,40 +296,40 @@ types:
         #  - 'baR'
         #  - 'BaZ'
 
-        # ---------- #
-        # "isPublic" #
-        # ---------- #
+        # -------- #
+        # "public" #
+        # -------- #
         # Matches a type's modifier that is public.
         # Boolean : true or false
-        # isPublic: true
+        # public: true
 
-        # ------------- #
-        # "isProtected" #
-        # ------------- #
+        # ----------- #
+        # "protected" #
+        # ----------- #
         # Matches a type's modifier that is protected.
         # Boolean : true or false
-        # isProtected: true
+        # protected: true
         
-        # ------------------ #
-        # "isPackagePrivate" #
-        # ------------------ #
+        # ---------------- #
+        # "packagePrivate" #
+        # ---------------- #
         # Matches a type's modifier that is package private.
         # Boolean : true or false
-        # isPackagePrivate: true
+        # packagePrivate: true
         
         # ---------- #
-        # "isStatic" #
+        # "static" #
         # ---------- #
         # Matches a type's modifier that is static.
         # Boolean : true or false
-        # isStatic: true
+        # static: true
         
         # --------- #
-        # "isFinal" #
+        # "final" #
         # --------- #
         # Matches a type's modifier that is final.
         # Boolean : true or false
-        # isFinal: true
+        # final: true
 
         # ----------------- #
         # "isAnnotatedWith" #
@@ -402,15 +402,15 @@ types:
 
 # Method types to be instrumented by stacksnap
 methods:
-    match:
+    include:
         # ------- #
         # "named" #
         # ------- #
         # Matches a method for its exact fully-qualified name
         # Represented as list of strings
-        named: 
-          - 'org.myapp.test.NewTestTimed'
-          - 'org.myapp.test.MyBaseClass'
+        # named: 
+        #  - 'org.myapp.test.NewTestTimed'
+        #  - 'org.myapp.test.MyBaseClass'
 
         # ----------- #
         # "nameRegex" #
@@ -500,47 +500,47 @@ methods:
         #  - 'org.myapp.BarAnnotation'
         #  - 'org.myapp.FooAnnotation'
 
-        # ---------- #
-        # "isPublic" #
-        # ---------- #
-        # Matches a method's modifier that is public.
+        # -------- #
+        # "public" #
+        # -------- #
+        # Matches a type's modifier that is public.
         # Boolean : true or false
-        # isPublic: true
+        # public: true
 
-        # ------------- #
-        # "isProtected" #
-        # ------------- #
-        # Matches a method's modifier that is protected.
+        # ----------- #
+        # "protected" #
+        # ----------- #
+        # Matches a type's modifier that is protected.
         # Boolean : true or false
-        # isProtected: true
+        # protected: true
 
-        # ---------- #
-        # "isPrivate" #
-        # ---------- #
-        # Matches a method's modifier that is private.
+        # --------- #
+        # "private" #
+        # --------- #
+        # Matches a type's modifier that is private.
         # Boolean : true or false
-        # isPrivate: true
+        # private: true
         
-        # ------------------ #
-        # "isPackagePrivate" #
-        # ------------------ #
-        # Matches a method's modifier that is package private.
+        # ---------------- #
+        # "packagePrivate" #
+        # ---------------- #
+        # Matches a type's modifier that is package private.
         # Boolean : true or false
-        # isPackagePrivate: true
+        # packagePrivate: true
         
         # ---------- #
-        # "isStatic" #
+        # "static" #
         # ---------- #
-        # Matches a method's modifier that is static.
+        # Matches a type's modifier that is static.
         # Boolean : true or false
-        # isStatic: true
+        # static: true
         
         # --------- #
-        # "isFinal" #
+        # "final" #
         # --------- #
-        # Matches a method's modifier that is final.
+        # Matches a type's modifier that is final.
         # Boolean : true or false
-        # isFinal: true
+        # final: true
         
         # ---------- #
         # "canThrow" #
@@ -700,47 +700,47 @@ methods:
         #  - 'org.myapp.BarAnnotation'
         #  - 'org.myapp.FooAnnotation'
 
-        # ---------- #
-        # "isPublic" #
-        # ---------- #
-        # Matches a method's modifier that is public.
+        # -------- #
+        # "public" #
+        # -------- #
+        # Matches a type's modifier that is public.
         # Boolean : true or false
-        # isPublic: true
+        # public: true
 
-        # ------------- #
-        # "isProtected" #
-        # ------------- #
-        # Matches a method's modifier that is protected.
+        # ----------- #
+        # "protected" #
+        # ----------- #
+        # Matches a type's modifier that is protected.
         # Boolean : true or false
-        # isProtected: true
+        # protected: true
 
-        # ---------- #
-        # "isPrivate" #
-        # ---------- #
-        # Matches a method's modifier that is private.
+        # --------- #
+        # "private" #
+        # --------- #
+        # Matches a type's modifier that is private.
         # Boolean : true or false
-        # isPrivate: true
+        # private: true
         
-        # ------------------ #
-        # "isPackagePrivate" #
-        # ------------------ #
-        # Matches a method's modifier that is package private.
+        # ---------------- #
+        # "packagePrivate" #
+        # ---------------- #
+        # Matches a type's modifier that is package private.
         # Boolean : true or false
-        # isPackagePrivate: true
+        # packagePrivate: true
         
         # ---------- #
-        # "isStatic" #
+        # "static" #
         # ---------- #
-        # Matches a method's modifier that is static.
+        # Matches a type's modifier that is static.
         # Boolean : true or false
-        # isStatic: true
+        # static: true
         
         # --------- #
-        # "isFinal" #
+        # "final" #
         # --------- #
-        # Matches a method's modifier that is final.
+        # Matches a type's modifier that is final.
         # Boolean : true or false
-        # isFinal: true
+        # final: true
         
         # ---------- #
         # "canThrow" #

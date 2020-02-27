@@ -2,16 +2,16 @@ package org.stacksnap.config;
 
 public class Type {
 
-	private BaseType match;
+	private BaseType include;
 	
 	private BaseType ignore;
 
-	public BaseType getMatch() {
-		return match;
+	public BaseType getInclude() {
+		return include;
 	}
 
-	public void setMatch(BaseType match) {
-		this.match = match;
+	public void setInclude(BaseType include) {
+		this.include = include;
 	}
 
 	public BaseType getIgnore() {
@@ -22,9 +22,5 @@ public class Type {
 		this.ignore = ignore;
 	}
 
-	@Override
-	public String toString() {
-		return "Type [match=" + match + ", ignore=" + ignore + "]";
-	}
 	
 }

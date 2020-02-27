@@ -3,7 +3,7 @@ package org.stacksnap.config;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class NamingElements {
+public class CommonElements {
 	private Set<String> nameEndsWith = new TreeSet<String>();
 	private Set<String> nameEndsWithIgnoreCase = new TreeSet<String>();
 	private Set<String> nameStartsWith = new TreeSet<String>();
@@ -12,21 +12,23 @@ public class NamingElements {
 	private Set<String> nameContains = new TreeSet<String>();
 	private Set<String> nameContainsIgnoreCase = new TreeSet<String>();
 	private Set<String> nameRegex = new TreeSet<String>();
-	
-	private Set<String> nameMatches = new TreeSet<String>(); 
+	private Set<String> nameMatches = new TreeSet<String>();
+	private Set<String> isAnnotatedWith = new TreeSet<String>();
 
-	public boolean isValid() {
-		return !nameEndsWith.isEmpty() 
-			   || !nameEndsWithIgnoreCase.isEmpty()
-			   || !nameStartsWith.isEmpty() 
-			   || !named.isEmpty() 
-			   || !namedIgnoreCase.isEmpty() 
-			   || !nameContains.isEmpty() 
-			   || !nameContainsIgnoreCase.isEmpty() 
-			   || !nameRegex.isEmpty() 
-			   || !nameMatches.isEmpty();
+	private boolean isPublic;
+	private boolean isProtected;
+	private boolean isPackagePrivate;
+	private boolean isStatic;
+	private boolean isFinal;
+
+	public boolean checkValid() {
+		return !nameEndsWith.isEmpty() || !nameEndsWithIgnoreCase.isEmpty() || !nameStartsWith.isEmpty()
+				|| !named.isEmpty() || !namedIgnoreCase.isEmpty() || !nameContains.isEmpty()
+				|| !nameContainsIgnoreCase.isEmpty() || !nameRegex.isEmpty() || !nameMatches.isEmpty()
+				|| !isAnnotatedWith.isEmpty() || isPublic == true || isProtected == true
+				|| isPackagePrivate == true || isStatic == true || isFinal == true;
 	}
-	
+
 	public Set<String> getNameEndsWith() {
 		return nameEndsWith;
 	}
@@ -97,6 +99,54 @@ public class NamingElements {
 
 	public void setNameMatches(Set<String> nameMatches) {
 		this.nameMatches = nameMatches;
+	}
+
+	public Set<String> getIsAnnotatedWith() {
+		return isAnnotatedWith;
+	}
+
+	public void setIsAnnotatedWith(Set<String> isAnnotatedWith) {
+		this.isAnnotatedWith = isAnnotatedWith;
+	}
+
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
+
+	public boolean isProtected() {
+		return isProtected;
+	}
+
+	public void setProtected(boolean isProtected) {
+		this.isProtected = isProtected;
+	}
+
+	public boolean isPackagePrivate() {
+		return isPackagePrivate;
+	}
+
+	public void setPackagePrivate(boolean isPackagePrivate) {
+		this.isPackagePrivate = isPackagePrivate;
+	}
+
+	public boolean isStatic() {
+		return isStatic;
+	}
+
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
+	}
+
+	public boolean isFinal() {
+		return isFinal;
+	}
+
+	public void setFinal(boolean isFinal) {
+		this.isFinal = isFinal;
 	}
 
 }
