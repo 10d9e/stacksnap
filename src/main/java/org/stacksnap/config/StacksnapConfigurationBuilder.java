@@ -72,7 +72,9 @@ public class StacksnapConfigurationBuilder {
 
 	private static void printPathError() {
 
-		Logger.error("Please setup 'stacksnap.yml' configuration file on your classpath");
+		Logger.error("Create a 'stacksnap.yml' configuration file in the root");
+		Logger.error("of your classpath, for example:");
+
 
 		InputStream inputStream = StacksnapConfigurationBuilder.class
 				.getResourceAsStream("/org/stacksnap/config/configuration-template.yml");
@@ -80,9 +82,13 @@ public class StacksnapConfigurationBuilder {
 		try (Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8.name())) {
 			text = scanner.useDelimiter("\\A").next();
 		}
-		Logger.error("*************** START stacksnap.yml ***************");
-		Logger.error(text);
-		Logger.error("**************** END stacksnap.yml ****************");
+		System.err.println();
+		System.err.println("----------------------< stacksnap.yml file >-----------------------");
+		System.err.println();
+		System.err.println(text);
+		System.err.println();
+		System.err.println("----------------------< stacksnap.yml file >------------------------");
+		System.err.println();
 
 	}
 

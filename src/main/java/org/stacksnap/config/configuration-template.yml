@@ -1,7 +1,7 @@
+# Stacksnap Minimal Configuration 
+# Define type and method interception
+# points for errors and recordings
 
-# Create stacksnap.yml file and add the following 
-# contents to define type and method interception
-# points
 # Class types to be instrumented by stacksnap
 types:
     # Match section to configure type matchers

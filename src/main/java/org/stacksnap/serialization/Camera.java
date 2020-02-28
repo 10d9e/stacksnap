@@ -30,7 +30,7 @@ public final class Camera {
 			final String SNAP_DIRECTORY = StacksnapConfigurationBuilder.getConfiguration().getPath();
 			Snapshot snap = new Snapshot(threadId, entrance, target, method, error, args);
 
-			final String filename = SNAP_DIRECTORY + File.separator + target.getClass().getName() + "-"
+			final String filename = SNAP_DIRECTORY + File.separator + "error-" + target.getClass().getName() + "-"
 					+ SDF.format(new Date());
 			String xml = xstream.toXML(snap);
 
