@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.stacksnap.agent.Logger;
 import org.stacksnap.config.StacksnapConfigurationBuilder;
@@ -34,7 +35,11 @@ public final class Recorder {
 
 	public static <T> void append(long threadId, Entrance entrance, T target, Method method, Object[] args, Throwable error) {
 		try {
-			Snapshot snapshot = new Snapshot(threadId, entrance, target, method, error, args);
+			List<Map<String, Object>> frames = null;
+			if(error != null) {
+			//	frames = FrameUtil.parseFrames(error);
+			}
+			Snapshot snapshot = new Snapshot(threadId, entrance, target, method, args, error, frames);
 			recording.add(snapshot);			
 		} catch (Exception e) {
 			Logger.log("Error creating snapshot: " + e.getMessage());

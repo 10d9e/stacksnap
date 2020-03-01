@@ -6,9 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 import org.stacksnap.agent.Logger;
 import org.stacksnap.config.StacksnapConfigurationBuilder;
+import org.stacksnap.util.FastCache;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -25,13 +29,22 @@ public final class Camera {
 	}
 
 	public static <T> String snap(long threadId, Entrance entrance, T target, Method method, Object[] args,
-			Throwable error) {
+			Throwable error, FastCache<String, Object> context) {
 		try {
 			final String SNAP_DIRECTORY = StacksnapConfigurationBuilder.getConfiguration().getPath();
-			Snapshot snap = new Snapshot(threadId, entrance, target, method, error, args);
+			
+			List<Map<String, Object>> frames = FrameUtil.parseFrames(error, context);
+			Snapshot snap = new Snapshot(threadId, entrance, target, method, args, error, frames);
 
-			final String filename = SNAP_DIRECTORY + File.separator + "error-" + target.getClass().getName() + "-"
-					+ SDF.format(new Date());
+			String filename;
+			if(target != null) {
+				filename = SNAP_DIRECTORY + File.separator + "error-" + target.getClass().getName() + "." + method.getName() + "-"
+						+ SDF.format(new Date());
+			} else {
+				filename = SNAP_DIRECTORY + File.separator + "error-" + method.getName() + "-"
+						+ SDF.format(new Date());
+			}
+			
 			String xml = xstream.toXML(snap);
 
 			if (Files.notExists(Paths.get(SNAP_DIRECTORY))) {
@@ -47,6 +60,18 @@ public final class Camera {
 		}
 		return null;
 
+	}
+	
+	public static Snapshot restoreSnapshot(String path) {
+		try {
+			String xml = Files.readString(Paths.get(path));
+			return (Snapshot) xstream.fromXML(xml);
+
+		} catch (Exception e) {
+			Logger.log("Error restoring snapshot: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -99,13 +124,17 @@ public final class Camera {
 
 	public static void main(String... args) throws NoSuchMethodException, SecurityException {
 
+		
 		Test t = new Camera.Test();
 
 		Method m = t.getClass().getDeclaredMethod("doIt");
 
+		FastCache<String, Object> context = new FastCache(200, 500, 100);
+		context.put(t.getClass().getName(), t);
 		String filename = Camera.snap(Thread.currentThread().getId(), Entrance.ENTER, t, m, new Object[] {},
-				new Exception("Fna"));
+				new Exception("Fna"), context);
 
+		//String filename = "snap/error-org.stacksnap.serialization.Camera$Test-2020-02-29-18:04:07.073";
 		Test restored = Camera.restore(filename);
 		System.out.println(restored);
 

@@ -83,7 +83,7 @@ public class StacksnapConfigurationBuilder {
 			text = scanner.useDelimiter("\\A").next();
 		}
 		System.err.println();
-		System.err.println("----------------------< stacksnap.yml file >-----------------------");
+		System.err.println("----------------------< stacksnap.yml file >------------------------");
 		System.err.println();
 		System.err.println(text);
 		System.err.println();

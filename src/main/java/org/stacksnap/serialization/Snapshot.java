@@ -1,6 +1,8 @@
 package org.stacksnap.serialization;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 
 public class Snapshot {
 	
@@ -15,11 +17,13 @@ public class Snapshot {
 	private Throwable error;
 
 	private Object[] arguments;
+	
+	List<Map<String, Object>> frames;
 
 	public Snapshot() {
 	}
 
-	public Snapshot(long threadId, Entrance entrance, Object target, Method method, Throwable error, Object[] arguments) {
+	public Snapshot(long threadId, Entrance entrance, Object target, Method method, Object[] arguments, Throwable error, List<Map<String, Object>> frames) {
 		super();
 		this.threadId = threadId;
 		this.entrance = entrance;
@@ -27,6 +31,7 @@ public class Snapshot {
 		this.method = method;
 		this.error = error;
 		this.arguments = arguments;
+		this.frames = frames;
 	}
 	
 	public Snapshot(long threadId, Entrance entrance, Object target, Method method, Object[] arguments) {
@@ -86,4 +91,13 @@ public class Snapshot {
 		this.threadId = threadId;
 	}
 
+	public List<Map<String, Object>> getFrames() {
+		return frames;
+	}
+
+	public void setFrames(List<Map<String, Object>> frames) {
+		this.frames = frames;
+	}
+
+	
 }

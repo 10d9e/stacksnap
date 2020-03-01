@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 import org.stacksnap.config.Loggable;
 import org.stacksnap.config.StacksnapConfiguration;
 import org.stacksnap.config.StacksnapConfigurationBuilder;
+import org.stacksnap.web.WebServer;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
+
 
 public class StacksnapAgent {
 
@@ -23,7 +25,9 @@ public class StacksnapAgent {
 	}
 
 	public static void premain(String arguments, Instrumentation instrumentation) {
+				
 		Logger.log("Welcome to Stacksnap.");
+		WebServer.start();
 		
 		// suppress superfluous Illegal access warnings from JDK9+
 		exportAndOpen(instrumentation);
@@ -40,24 +44,26 @@ public class StacksnapAgent {
 		agentBuilder = handleLogging(config, agentBuilder);
 
 		agentBuilder
-				.ignore(nameStartsWith("net.bytebuddy").or(nameStartsWith("org.stacksnap"))
-						.or(nameStartsWith("com.yevdo.jwildcard")).or(nameStartsWith("com.thoughtworks.xstream"))
-						.or(nameStartsWith("org.xmlpull")).or(nameStartsWith("jdk")).or(nameStartsWith("java"))
-						.or(nameStartsWith("sun")).or(nameStartsWith("com.sun")).or(nameStartsWith("org.yaml")).or(
-								StacksnapConfigurationBuilder.typeIgnores()))
-				.type(StacksnapConfigurationBuilder
-						.typeIncludes())
+				.ignore(nameStartsWith("net.bytebuddy")
+						.or(nameStartsWith("org.stacksnap"))
+						.or(nameStartsWith("com.yevdo.jwildcard"))
+						.or(nameStartsWith("com.thoughtworks.xstream"))
+						.or(nameStartsWith("org.xmlpull"))
+						.or(nameStartsWith("jdk"))
+						.or(nameStartsWith("java"))
+						.or(nameStartsWith("sun"))
+						.or(nameStartsWith("com.sun"))
+						.or(nameStartsWith("org.yaml"))
+						.or(StacksnapConfigurationBuilder.typeIgnores()))
+				.type(StacksnapConfigurationBuilder.typeIncludes())
 				.transform((builder, type, classLoader, module) -> builder
 						.visit(Advice.to(StacksnapExceptionHandler.class)
 								.on(isMethod().and(StacksnapConfigurationBuilder.errorMethodIncludes())))
 
 						.visit(Advice.to(StacksnapRecorder.class)
 								.on(isMethod().and(StacksnapConfigurationBuilder.recordMethodIncludes())))
-
-				)
-
-				.installOn(instrumentation);
-
+												
+				).installOn(instrumentation);
 	}
 
 	private static void exportAndOpen(Instrumentation instrumentation) {
