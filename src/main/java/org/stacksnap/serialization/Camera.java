@@ -59,7 +59,7 @@ public final class Camera {
 			return filename;
 		} catch (Exception e) {
 			Logger.log("Error creating snapshot: " + e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return null;
 

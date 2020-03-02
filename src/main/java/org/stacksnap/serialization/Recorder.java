@@ -29,17 +29,12 @@ public final class Recorder {
 
 	public static List<Snapshot> recording = new ArrayList<>();
 
-	public static <T> void append(long threadId, Entrance entrance, T target, Method method, Object[] args) {
-		append(threadId, entrance, target, method, args, null);
-	}
-
-	public static <T> void append(long threadId, Entrance entrance, T target, Method method, Object[] args, Throwable error) {
+	public static <T> void append(Snapshot snapshot) {
 		try {
-			List<Map<String, Object>> frames = null;
-			if(error != null) {
-			//	frames = FrameUtil.parseFrames(error);
-			}
-			Snapshot snapshot = new Snapshot(threadId, entrance, target, method, args, error, frames);
+			snapshot.setError(new Exception("Stack trace"));
+			List<Map<String, Object>> frames = FrameUtil.parseFrames(snapshot);
+			snapshot.setFrames(frames);
+
 			recording.add(snapshot);			
 		} catch (Exception e) {
 			Logger.log("Error creating snapshot: " + e.getMessage());
@@ -123,13 +118,14 @@ public final class Recorder {
 		Method m = t.getClass().getDeclaredMethod("doIt");
 		
 		long currentThreadId = Thread.currentThread().getId();
-		Recorder.append(currentThreadId, Entrance.ENTER, t, m, new Object[] {}, new Exception("Fna"));
-		Recorder.append(currentThreadId,Entrance.ENTER, t, m, new Object[] {}, new Exception("Fna"));
-		Recorder.append(currentThreadId,Entrance.ENTER, t, m, new Object[] {}, new Exception("Fna"));
-		Recorder.append(currentThreadId,Entrance.EXIT, t, m, new Object[] {}, new Exception("Fna"));
-		Recorder.append(currentThreadId,Entrance.EXIT, t, m, new Object[] {}, new Exception("Fna"));
-		Recorder.append(currentThreadId,Entrance.EXIT, t, m, new Object[] {}, new Exception("Fna"));
-
+				
+		Recorder.append(new Snapshot(currentThreadId, Entrance.ENTER, t, m, new Object[] {}));
+		Recorder.append(new Snapshot(currentThreadId, Entrance.ENTER, t, m, new Object[] {}));
+		Recorder.append(new Snapshot(currentThreadId, Entrance.ENTER, t, m, new Object[] {}));
+		Recorder.append(new Snapshot(currentThreadId, Entrance.ENTER, t, m, new Object[] {}));
+		Recorder.append(new Snapshot(currentThreadId, Entrance.ENTER, t, m, new Object[] {}));
+		Recorder.append(new Snapshot(currentThreadId, Entrance.ENTER, t, m, new Object[] {}));
+		
 		String filename = Recorder.persist();
 		List<Snapshot> recording = Recorder.restore(filename);
 

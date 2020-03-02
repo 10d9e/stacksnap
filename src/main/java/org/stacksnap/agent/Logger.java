@@ -2,20 +2,20 @@ package org.stacksnap.agent;
 
 public final class Logger {
 	
-	private static StackSnapStreamWriting instance = StackSnapStreamWriting.toSystemOut();
+	private static StacksnapStreamWriting instance = StacksnapStreamWriting.toSystemOut();
 	
 	
-	public static StackSnapStreamWriting toSystemError() {
-		instance = StackSnapStreamWriting.toSystemError();
+	public static StacksnapStreamWriting toSystemError() {
+		instance = StacksnapStreamWriting.toSystemError();
 		return instance;
 	}
 	
-	public static StackSnapStreamWriting toSystemOut() {
-		instance = StackSnapStreamWriting.toSystemOut();
+	public static StacksnapStreamWriting toSystemOut() {
+		instance = StacksnapStreamWriting.toSystemOut();
 		return instance;
 	}
 	
-	public static StackSnapStreamWriting getInstance() {
+	public static StacksnapStreamWriting getInstance() {
 		return instance;
 	}
 	

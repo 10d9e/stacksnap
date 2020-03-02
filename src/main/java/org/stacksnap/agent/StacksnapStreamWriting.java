@@ -16,7 +16,7 @@ import net.bytebuddy.utility.JavaModule;
  * question.
  */
 @HashCodeAndEqualsPlugin.Enhance
-class StackSnapStreamWriting implements Listener {
+class StacksnapStreamWriting implements Listener {
 
 	/**
 	 * The prefix that is appended to all written messages.
@@ -33,7 +33,7 @@ class StackSnapStreamWriting implements Listener {
 	 *
 	 * @param printStream The print stream written to.
 	 */
-	public StackSnapStreamWriting(PrintStream printStream) {
+	public StacksnapStreamWriting(PrintStream printStream) {
 		this.printStream = printStream;
 	}
 
@@ -42,8 +42,8 @@ class StackSnapStreamWriting implements Listener {
 	 *
 	 * @return A listener writing events to the standard output stream.
 	 */
-	public static StackSnapStreamWriting toSystemOut() {
-		return new StackSnapStreamWriting(System.out);
+	public static StacksnapStreamWriting toSystemOut() {
+		return new StacksnapStreamWriting(System.out);
 	}
 
 	/**
@@ -51,8 +51,8 @@ class StackSnapStreamWriting implements Listener {
 	 *
 	 * @return A listener writing events to the standard error stream.
 	 */
-	public static StackSnapStreamWriting toSystemError() {
-		return new StackSnapStreamWriting(System.err);
+	public static StacksnapStreamWriting toSystemError() {
+		return new StacksnapStreamWriting(System.err);
 	}
 
 	/**

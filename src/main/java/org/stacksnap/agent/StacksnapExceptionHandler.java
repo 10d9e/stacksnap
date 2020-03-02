@@ -16,9 +16,10 @@ public class StacksnapExceptionHandler {
 			@Advice.Origin Method method, @Advice.AllArguments Object[] arguments) {
 		
 		Logger.log("%s: %s", "ENTER StacksnapExceptionHandler", method.getName());
-		StacknapStack.put(clazz, method,
-				new Snapshot(Thread.currentThread().getId(), Entrance.ENTER, instance, method, arguments));
+		Snapshot snapshot = new Snapshot(Thread.currentThread().getId(), Entrance.ENTER, instance, method, arguments);
+		StacknapStack.put(clazz, method, snapshot);
 
+		
 	}
 
 	@Advice.OnMethodExit(onThrowable = Throwable.class)
@@ -26,13 +27,16 @@ public class StacksnapExceptionHandler {
 			@Advice.Origin Class<?> clazz, @Advice.AllArguments Object[] arguments, @Advice.Thrown Throwable e) {
 		
 		Logger.log("%s: %s", "EXIT StacksnapExceptionHandler", method.getName());
-		
 		Snapshot snapshot = new Snapshot(Thread.currentThread().getId(), Entrance.EXIT, instance, method, arguments, e);
 		StacknapStack.put(clazz, method, snapshot);
+
+		
 		if (e != null) {
 			Camera.snap(snapshot);
 		}
+		
 		StacknapStack.remove(clazz, method);
+		
 	}
 
 }

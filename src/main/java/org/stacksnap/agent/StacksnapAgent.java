@@ -25,7 +25,7 @@ public class StacksnapAgent {
 	}
 
 	public static void premain(String arguments, Instrumentation instrumentation) {
-				
+						
 		Logger.log("Welcome to Stacksnap.");
 		WebServer.start();
 		
@@ -77,7 +77,7 @@ public class StacksnapAgent {
 
 	private static AgentBuilder buildLog(AgentBuilder agentBuilder, Loggable loggable) {
 		if (loggable != null) {
-			StackSnapStreamWriting log = Logger.getInstance();
+			StacksnapStreamWriting log = Logger.getInstance();
 
 			if (loggable.isTransformationsOnly() == true) {
 				agentBuilder = agentBuilder.with(log.withTransformationsOnly());

@@ -44,6 +44,19 @@ public final class FrameUtil {
 		}
 		return frames.build();
 	}
+	
+	public static List<Map<String, Object>> parseFrames(Snapshot snapshot, StackTraceElement[] stackframes) {
+
+		ImmutableList.Builder<Map<String, Object>> frames = ImmutableList.builder();
+		if (snapshot.getError() != null) {
+			for (StackTraceElement frame : stackframes) {
+
+				Snapshot s = StacknapStack.get(frame.getClassName(), frame.getMethodName());
+				frames.add(parseFrame(frame, s));
+			}
+		}
+		return frames.build();
+	}
 
 	private static Map<String, Object> methodParameters(Snapshot s) {
 		if (s == null) {
