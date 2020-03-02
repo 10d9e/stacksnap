@@ -1,28 +1,21 @@
 package org.stacksnap.web;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.stacksnap.agent.StacksnapExceptionHandler;
 import org.stacksnap.serialization.Camera;
 import org.stacksnap.serialization.FileSearchSourceLocator;
 import org.stacksnap.serialization.Snapshot;
 import org.stacksnap.serialization.SourceLocator;
 
-import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 import freemarker.template.Configuration;
 import freemarker.template.Version;
@@ -77,7 +70,7 @@ public class DebugScreen {
             installTables(tables, request, snapshot);
             model.put("tables", tables);
             
-            return templateEngine.render(Spark.modelAndView(model, "stacksnap-error.ftl"));
+            return templateEngine.render(Spark.modelAndView(model, "stacksnap-error.html"));
             //response.body(templateEngine.render(Spark.modelAndView(model, "debugscreen.ftl")));
         } catch (Exception e) {
         	e.printStackTrace();
@@ -106,9 +99,6 @@ public class DebugScreen {
      * @param tables the map containing the tables to display on the debug screen
      */
     protected void installTables(LinkedHashMap<String, Map<String, ? extends Object>> tables, Request request, Snapshot snapshot) {
-    	if(snapshot.getTarget() != null) {
-    		tables.put( "State [" + snapshot.getTarget().getClass().getName() + "]", getTargetInfo(snapshot));
-    	}
     	/*
         tables.put("Headers", setToLinkedHashMap(request.headers(), h -> h, request::headers));
         tables.put("Spark Request properties", getRequestInfo(request));
@@ -119,7 +109,18 @@ public class DebugScreen {
         tables.put("Cookies", request.cookies());
         tables.put("Environment", getEnvironmentInfo());
         */
+    	
+    	//tables.put("Method Arguments", getMethodArgs(snapshot));
     	tables.put("Environment", getEnvironmentInfo(snapshot));
+    }
+    
+    private LinkedHashMap<String, Object> getMethodArgs(Snapshot snapshot) {
+        LinkedHashMap<String, Object> info = new LinkedHashMap<>();
+        Parameter [] params = snapshot.getMethod().getParameters();
+        for (int i =0; i < params.length; i++) {
+        	info.put(params[i].getName(), snapshot.getArguments()[i]);
+        }
+        return info;
     }
     
     private LinkedHashMap<String, Object> getTargetInfo(Snapshot snapshot) {

@@ -34,6 +34,16 @@ public class Snapshot {
 		this.frames = frames;
 	}
 	
+	public Snapshot(long threadId, Entrance entrance, Object target, Method method, Object[] arguments, Throwable error) {
+		super();
+		this.threadId = threadId;
+		this.entrance = entrance;
+		this.target = target;
+		this.method = method;
+		this.error = error;
+		this.arguments = arguments;
+	}
+	
 	public Snapshot(long threadId, Entrance entrance, Object target, Method method, Object[] arguments) {
 		super();
 		this.threadId = threadId;

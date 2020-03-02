@@ -6,6 +6,8 @@ Zepto(function ($) {
     var $activeFrame = $detailsContainer.find('.frame-code.active');
     var $ajaxEditors = $('.editor-link[data-ajax]');
 
+    var $activeDetails = $detailsContainer.find('.frame-details.active');
+
     prettyPrint();
     highlightCurrentLine();
 
@@ -33,15 +35,20 @@ Zepto(function ($) {
         var id = /frame\-line\-([\d]*)/.exec($this.attr('id'))[1];
         var $codeFrame = $('#frame-code-' + id);
 
+        var $detailsFrame = $('#frame-details-' + id);
+
         if ($codeFrame) {
             $activeLine.removeClass('active');
             $activeFrame.removeClass('active');
+            $activeDetails.removeClass('active');
 
             $this.addClass('active');
             $codeFrame.addClass('active');
+            $detailsFrame.addClass('active');
 
             $activeLine = $this;
             $activeFrame = $codeFrame;
+            $activeDetails = $detailsFrame;
 
             highlightCurrentLine();
 

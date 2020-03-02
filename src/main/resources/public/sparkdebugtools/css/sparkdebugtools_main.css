@@ -353,6 +353,24 @@ a {
     min-height: 115px;
 }
 
+/******/
+.frame-details {
+    display: none;
+    margin-bottom: 20px;
+}
+
+.frame-details.active {
+    display: block;
+}
+
+.frame-details .frame-file {
+    color: #a29d9d;
+    padding: 12px 6px;
+    border-bottom: none;
+}
+
+/******/
+
 .frame-file {
     font-family: "Inconsolata", "Fira Mono", "Source Code Pro", Monaco, Consolas, "Lucida Console", monospace;
     word-wrap: break-word;
@@ -414,6 +432,11 @@ div.data-table {
     width: 100%;
     margin-bottom: 10px;
     border-collapse: collapse;
+}
+
+.data-table h3 strong{
+    color: grey;
+    font-size: 85%;
 }
 
 .data-table-container > .data-table:before {

@@ -6,11 +6,13 @@ import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.stacksnap.util.FastCache;
+import org.stacksnap.util.StacknapStack;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
@@ -19,39 +21,69 @@ import com.google.common.collect.ImmutableMap;
 
 public final class FrameUtil {
 
-	private final static SourceLocator[] sourceLocators = {
-			new FileSearchSourceLocator("./src/main/java"),
-			new FileSearchSourceLocator("./src"), 
-			new FileSearchSourceLocator("./src/test/java") 
-	};
-	
+	private final static SourceLocator[] sourceLocators = { new FileSearchSourceLocator("./src/main/java"),
+			new FileSearchSourceLocator("./src"), new FileSearchSourceLocator("./src/test/java") };
+
 	/**
 	 * Parses all stack frames for an exception into a view model.
 	 *
 	 * @param e An exception.
 	 * @return A view model for the frames in the exception.
-	 * @throws SecurityException 
-	 * @throws NoSuchMethodException 
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
 	 */
-	public static List<Map<String, Object>> parseFrames(Throwable e, FastCache<String, Object> context) {
+	public static List<Map<String, Object>> parseFrames(Snapshot snapshot) {
+
 		ImmutableList.Builder<Map<String, Object>> frames = ImmutableList.builder();
-		for (StackTraceElement frame : e.getStackTrace()) {
-			Object o = toMap( context.get(frame.getClassName()));
-			frames.add(parseFrame(frame, o));
+		if (snapshot.getError() != null) {
+			for (StackTraceElement frame : snapshot.getError().getStackTrace()) {
+
+				Snapshot s = StacknapStack.get(frame.getClassName(), frame.getMethodName());
+				frames.add(parseFrame(frame, s));
+			}
 		}
 		return frames.build();
 	}
-	
-	private static LinkedHashMap<String, Object> toMap(Object target) {
-		if(target == null) {
+
+	private static Map<String, Object> methodParameters(Snapshot s) {
+		if (s == null) {
 			return null;
 		}
-        LinkedHashMap<String, Object> info = new LinkedHashMap<>();
-        
-        for(Field f : target.getClass().getDeclaredFields()){
-        	try {
-        		f.setAccessible(true);
-				info.put(f.getName(), f.get(target).toString());
+		Method m = s.getMethod();
+		Object[] args = s.getArguments();
+		LinkedHashMap<String, Object> info = new LinkedHashMap<>();
+		Parameter[] params = m.getParameters();
+		for (int i = 0; i < params.length; i++) {
+			info.put(String.format("%s [%s]", params[i].getName(), params[i].getType().getCanonicalName()),
+					args[i].toString());
+		}
+		if (info.isEmpty()) {
+			return null;
+		}
+		return info;
+	}
+
+	private static Map<String, Object> targetToMap(Snapshot s) {
+		if (s == null) {
+			return null;
+		}
+		Object target = s.getTarget();
+		if (target == null) {
+			return null;
+		}
+		Class<?> clazz = target.getClass();
+		LinkedHashMap<String, Object> info = new LinkedHashMap<>();
+		// info.put("[this]", clazz.getName());
+
+		for (Field f : clazz.getDeclaredFields()) {
+			try {
+				f.setAccessible(true);
+				String name = String.format("%s [%s]", f.getName(), f.getType().getCanonicalName());
+				if (target != null) {
+					info.put(name, f.get(target).toString());
+				} else if (Modifier.isStatic(f.getModifiers())) {
+					info.put(name, f.get(null));
+				}
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -59,9 +91,9 @@ public final class FrameUtil {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
-        return info;
-    }
+		}
+		return info;
+	}
 
 	/**
 	 * Parses a stack frame into a view model.
@@ -69,12 +101,17 @@ public final class FrameUtil {
 	 * @param sframe A stack trace frame.
 	 * @return A view model for the given frame in the template.
 	 */
-	private static Map<String, Object> parseFrame(StackTraceElement sframe, Object frameThis) {
-    	
+	private static Map<String, Object> parseFrame(StackTraceElement sframe, Snapshot framesnap) {
 
 		ImmutableMap.Builder<String, Object> frame = ImmutableMap.builder();
 		frame.put("file", Optional.fromNullable(sframe.getFileName()).or("<#unknown>"));
+
+		Object frameThis = targetToMap(framesnap);
 		frame.put("this", Optional.fromNullable(frameThis).or(""));
+
+		Object params = methodParameters(framesnap);
+		frame.put("params", Optional.fromNullable(params).or(""));
+
 		frame.put("class", Optional.fromNullable(sframe.getClassName()).or(""));
 		frame.put("line", Optional.fromNullable(Integer.toString(sframe.getLineNumber())).or(""));
 		frame.put("function", Optional.fromNullable(sframe.getMethodName()).or(""));

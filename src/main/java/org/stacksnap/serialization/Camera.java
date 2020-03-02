@@ -25,16 +25,19 @@ public final class Camera {
 	static {
 		XStream.setupDefaultSecurity(xstream);
 		xstream.allowTypesByWildcard(new String[] { "**.*" });
+		xstream.denyTypes(new Class[]{XStream.class});
 		xstream.alias("Snapshot", Snapshot.class);
 	}
 
-	public static <T> String snap(long threadId, Entrance entrance, T target, Method method, Object[] args,
-			Throwable error, FastCache<String, Object> context) {
+	public static <T> String snap(Snapshot snapshot) {
 		try {
 			final String SNAP_DIRECTORY = StacksnapConfigurationBuilder.getConfiguration().getPath();
 			
-			List<Map<String, Object>> frames = FrameUtil.parseFrames(error, context);
-			Snapshot snap = new Snapshot(threadId, entrance, target, method, args, error, frames);
+			List<Map<String, Object>> frames = FrameUtil.parseFrames(snapshot);
+			snapshot.setFrames(frames);
+			
+			Object target = snapshot.getTarget();
+			Method method = snapshot.getMethod();
 
 			String filename;
 			if(target != null) {
@@ -45,7 +48,7 @@ public final class Camera {
 						+ SDF.format(new Date());
 			}
 			
-			String xml = xstream.toXML(snap);
+			String xml = xstream.toXML(snapshot);
 
 			if (Files.notExists(Paths.get(SNAP_DIRECTORY))) {
 				Files.createDirectory(Paths.get(SNAP_DIRECTORY));
@@ -107,6 +110,9 @@ public final class Camera {
 	}
 
 	public static class Test {
+		
+		private static final String SECRET = "hellow";
+		
 		private int age = 44;
 		private String name = "Jay";
 		private Boolean male = true;
@@ -122,23 +128,5 @@ public final class Camera {
 
 	}
 
-	public static void main(String... args) throws NoSuchMethodException, SecurityException {
-
-		
-		Test t = new Camera.Test();
-
-		Method m = t.getClass().getDeclaredMethod("doIt");
-
-		FastCache<String, Object> context = new FastCache(200, 500, 100);
-		context.put(t.getClass().getName(), t);
-		String filename = Camera.snap(Thread.currentThread().getId(), Entrance.ENTER, t, m, new Object[] {},
-				new Exception("Fna"), context);
-
-		//String filename = "snap/error-org.stacksnap.serialization.Camera$Test-2020-02-29-18:04:07.073";
-		Test restored = Camera.restore(filename);
-		System.out.println(restored);
-
-		Object out = Camera.replay(filename);
-		System.out.println("Replayed: " + out);
-	}
+	
 }

@@ -1,45 +1,38 @@
 package org.stacksnap.agent;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.stacksnap.serialization.Camera;
 import org.stacksnap.serialization.Entrance;
-import org.stacksnap.util.FastCache;
+import org.stacksnap.serialization.Snapshot;
+import org.stacksnap.util.StacknapStack;
 
 import net.bytebuddy.asm.Advice;
 
 public class StacksnapExceptionHandler {
 
-	//public static Map<String, Object> context = new HashMap<>();
-	
-	// Test with crunchifyTimeToLive = 200 seconds
-    // crunchifyTimerInterval = 500 seconds
-    // maxItems = 100
-	public static FastCache<String, Object> context = new FastCache(200, 500, 100);
-	
 	@Advice.OnMethodEnter
-	private static void enter(@Advice.This(optional = true) Object obj, @Advice.Origin Class<?> clazz,
+	private static void enter(@Advice.This(optional = true) Object instance, @Advice.Origin Class<?> clazz,
 			@Advice.Origin Method method, @Advice.AllArguments Object[] arguments) {
-	
-		context.put(clazz.getName(), obj);
-		/*
-		System.out.println("Enter " + method.getDeclaringClass() + ":" + method.getName());
-		for (Object argument : arguments) {
-			System.out.println("\t" + argument.getClass().getSimpleName() + ":" + argument.toString());
-		}
-		*/
+		
+		Logger.log("%s: %s", "ENTER StacksnapExceptionHandler", method.getName());
+		StacknapStack.put(clazz, method,
+				new Snapshot(Thread.currentThread().getId(), Entrance.ENTER, instance, method, arguments));
+
 	}
 
 	@Advice.OnMethodExit(onThrowable = Throwable.class)
 	private static void exit(@Advice.Origin Method method, @Advice.This(optional = true) Object instance,
-			@Advice.AllArguments Object[] arguments, @Advice.Thrown Throwable e) {
+			@Advice.Origin Class<?> clazz, @Advice.AllArguments Object[] arguments, @Advice.Thrown Throwable e) {
 		
+		Logger.log("%s: %s", "EXIT StacksnapExceptionHandler", method.getName());
+		
+		Snapshot snapshot = new Snapshot(Thread.currentThread().getId(), Entrance.EXIT, instance, method, arguments, e);
+		StacknapStack.put(clazz, method, snapshot);
 		if (e != null) {
-			Camera.snap(Thread.currentThread().getId(), Entrance.EXIT, instance, method, arguments, e, context);
-			//context.cleanup();
+			Camera.snap(snapshot);
 		}
+		StacknapStack.remove(clazz, method);
 	}
 
 }

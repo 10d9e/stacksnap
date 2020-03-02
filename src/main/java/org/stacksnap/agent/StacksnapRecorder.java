@@ -14,6 +14,7 @@ public class StacksnapRecorder {
 	private static void enter(@Advice.This(optional = true) Object self, @Advice.Origin Class<?> clazz,
 			@Advice.Origin Method method, @Advice.AllArguments Object[] arguments) {
 		
+		Logger.log("%s: %s", "ENTER StacksnapRecorder", method.getName());
 		// hack 
 		if (method.getName().equals("dump")) {
 			Logger.log("dumping recording...");
@@ -38,6 +39,8 @@ public class StacksnapRecorder {
 	@Advice.OnMethodExit(onThrowable = Throwable.class)
 	private static void exit(@Advice.Origin Method method, @Advice.This(optional = true) Object self,
 			@Advice.AllArguments Object[] arguments, @Advice.Thrown Throwable exception) {
+		
+		Logger.log("%s: %s", "EXIT StacksnapRecorder", method.getName());
 		
 		Logger.log("Exit " + method.getDeclaringClass().getName() + "." + method.getName());
 		Logger.log("Thread: " + Thread.currentThread().getId());
